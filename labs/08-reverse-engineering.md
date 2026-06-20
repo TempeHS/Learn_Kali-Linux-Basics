@@ -1,4 +1,4 @@
-# Lesson 08 — Reverse Engineering Basics
+# Lesson 08 — Reverse Engineering & Binary Exploitation Basics
 
 **Reverse engineering** (RE) means taking a finished program apart to understand
 how it works — and, in a CTF, to recover a secret it's hiding. You don't need to
@@ -14,6 +14,7 @@ open a disassembler.
 - Identify a binary's type and architecture.
 - Pull readable text and secrets out of a binary.
 - Read a disassembly and explore functions with `radare2`.
+- Understand the core binary exploitation workflow used in CTF pwn challenges.
 
 ## Part A — Identify the binary
 
@@ -92,11 +93,80 @@ Then at the `[0x...]>` prompt:
 > Prefer a GUI? **Ghidra** does the same job with a graphical decompiler. For
 > beginner CTFs, `strings` + `radare2` is usually enough.
 
+## Part E — Binary exploitation core skills (pwn)
+
+Reverse engineering tells you what a binary does; binary exploitation (pwn)
+focuses on making it do something unintended.
+
+### 1. Protections check (concept)
+
+Modern binaries may include protections like canaries, NX and PIE. These change
+your exploit strategy.
+
+### 2. Debugging workflow with gdb
+
+Use gdb to inspect execution state and memory:
+
+```bash
+gdb -q /bin/ls -ex "info files" -ex "quit" | head -n 8
+```
+
+Expected output includes:
+
+```
+Symbols from "/bin/ls".
+```
+
+### 3. Build offsets with a cyclic pattern
+
+CTF pwn workflows often use generated patterns to find exact crash offsets:
+
+```bash
+python3 - <<'PY'
+import string
+alphabet = string.ascii_lowercase
+pattern = "".join(a + b + c for a in alphabet for b in alphabet for c in alphabet)
+print(pattern[:24])
+PY
+```
+
+Expected output:
+
+```
+aaaaabaacaadaaeaafaagaah
+```
+
+### 4. Endianness and packed addresses
+
+Most Linux CTF binaries are little-endian. That means addresses are written
+least-significant byte first.
+
+```bash
+python3 -c "import struct; print(struct.pack('<I', 0x41424344).hex())"
+```
+
+Expected output:
+
+```
+44434241
+```
+
+This is the same idea used when building payloads for stack overflows.
+
+### 5. Core pwn concepts to learn next
+
+- Stack buffer overflow and instruction pointer control.
+- Return-to-win and return-oriented programming (ROP).
+- Bypassing ASLR/NX/canaries with leaks and gadgets.
+- Automating exploitation with Python scripts.
+
 ## ✅ Challenge
 
 1. Run `file` on `/bin/ls` and `/usr/bin/python3`. Are they both ELF?
 2. Use `strings ... | grep` to find the Python version string in the binary.
-3. Try **Reverse Engineering → _Love letter_** at
+3. Run the gdb `info files` command and record one section name you see.
+4. Generate a 24-byte cyclic pattern and explain why offsets matter in pwn.
+5. Try **Reverse Engineering → _Love letter_** at
    [practice.pecanplus.org](https://practice.pecanplus.org/?page=challenges).
 
 ➡️ Next: [Lesson 09 — Network Scanning with Nmap](09-network-scanning-nmap.md)

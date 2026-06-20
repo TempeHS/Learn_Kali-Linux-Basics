@@ -1,4 +1,4 @@
-# Lesson 11 — Compete in the PECAN+ CTF 🏁
+# Lesson 11 — CTF Workflow Playbook & Competition 🏁
 
 This is what everything has been building towards. A **Capture The Flag (CTF)**
 is a competition where you solve security puzzles to uncover hidden **flags** —
@@ -17,6 +17,44 @@ every category. Time to play.
 2. You find the hidden flag, e.g. `pecan{y0u_f0und_me}`.
 3. You submit the flag for points. Harder challenges = more points.
 4. Difficulty is shown with locks: 🔓 Beginner · 🔓🔓 Intermediate · 🔓🔓🔓 Advanced.
+
+## Workflow playbook (how to score faster)
+
+This section is about **process**, not just tools. Strong teams usually beat
+strong individuals because they follow a repeatable workflow.
+
+### 1. Triage first, solve second
+
+- Read all challenge titles first.
+- Start with quick-win beginner challenges in categories you already know.
+- Skip hard blockers after 10-15 minutes and come back later.
+
+### 2. Keep evidence while solving
+
+Write commands and outputs as you go, not after you finish. This avoids losing
+time re-solving a challenge from memory.
+
+### 3. Use a consistent attempt loop
+
+1. Identify category and likely technique.
+2. Run 1-2 fast checks (metadata, strings, source view, Base64 decode).
+3. If no progress, switch tools once.
+4. If still blocked, park it and move to another challenge.
+
+### 4. Team handoff format
+
+When handing off, include:
+
+- What you already tried.
+- Exact command(s) run.
+- Exact output or error.
+- Current best hypothesis.
+
+### 5. Time-box strategy
+
+- First 30 minutes: bank easy flags quickly.
+- Middle phase: medium difficulty with team collaboration.
+- Final phase: revisit parked challenges with fresh context.
 
 ## Pick your tool by category
 
@@ -70,6 +108,13 @@ For every flag you capture, note:
 - The flag.
 
 Write-ups are the single best way to revise — and they look great in a portfolio.
+
+Suggested template for each solve:
+
+- Challenge name/category.
+- Initial clue and hypothesis.
+- Commands tried.
+- Final flag and why it worked.
 
 ## Compete for real
 

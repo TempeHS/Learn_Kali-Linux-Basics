@@ -73,7 +73,7 @@ the terminal:
 
 ---
 
-## 5. Web reconnaissance & exploits
+## 5. Web reconnaissance & exploitation basics
 
 | Command                                                       | Expected output                                              |
 | ------------------------------------------------------------- | ------------------------------------------------------------ |
@@ -83,6 +83,8 @@ the terminal:
 | `whatweb http://testphp.vulnweb.com`                          | a one-line fingerprint of the site's tech stack              |
 | `gobuster dir -u URL -w /usr/share/wordlists/dirb/common.txt` | discovered paths with `Status: 200/301`                      |
 | `nikto -h URL`                                                | a list of potential web server issues                        |
+| `curl -s "http://testphp.vulnweb.com/listproducts.php?cat=1%27" \| head -n 20` | SQL-related error text can indicate injectable input |
+| `sqlmap --version`                                            | installed version string                                     |
 
 ---
 
@@ -112,7 +114,7 @@ the terminal:
 
 ---
 
-## 8. Reverse engineering
+## 8. Reverse engineering & binary exploitation basics
 
 | Command                         | Expected output                             |
 | ------------------------------- | ------------------------------------------- |
@@ -122,6 +124,8 @@ the terminal:
 | `objdump -d program \| less`    | the full disassembly (press `q` to quit)    |
 | `radare2 -v`                    | `radare2 6.0.5 0 @ linux-x86-64`            |
 | `radare2 -A program` then `afl` | analysis loaded; `afl` lists all functions  |
+| `gdb -q /bin/ls -ex "info files" -ex "quit" \| head -n 8` | includes `Symbols from "/bin/ls".`         |
+| `python3 -c "import struct; print(struct.pack('<I', 0x41424344).hex())"` | `44434241` (little-endian)                  |
 
 ---
 
@@ -151,7 +155,7 @@ the terminal:
 
 ---
 
-## 11. CTF flag-hunting one-liners
+## 11. CTF workflow & flag-hunting one-liners
 
 | Command                                             | Expected output                                           |
 | --------------------------------------------------- | --------------------------------------------------------- |

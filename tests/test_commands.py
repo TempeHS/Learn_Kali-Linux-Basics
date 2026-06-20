@@ -48,13 +48,15 @@ requires_net = pytest.mark.skipif(
 # --------------------------------------------------------------------------- #
 TOOLS = [
     # Core shell
-    "bash", "ls", "cat", "grep", "find", "man", "tr",
+    "bash", "ls", "cat", "grep", "find", "man", "tr", "whoami",
+    "pwd", "hostname", "head", "tail", "mkdir", "rm", "rmdir",
+    "less", "awk", "python3", "gzip", "printf", "sudo", "apt-get",
     # Encoding / crypto (Lessons 2 & 3)
     "base64", "base32", "xxd", "openssl", "md5sum", "sha256sum",
     # OSINT / network (Lessons 4 & 9)
-    "curl", "whois", "dig", "nmap", "nc",
+    "curl", "whois", "dig", "nslookup", "nmap", "nc",
     # Web (Lesson 5)
-    "whatweb", "gobuster", "nikto", "sqlmap",
+    "whatweb", "gobuster", "dirb", "nikto", "sqlmap",
     # Steganography / forensics (Lessons 6 & 7)
     "file", "strings", "exiftool", "steghide", "binwalk", "foremost",
     "pngcheck", "convert", "tshark", "tcpdump",
@@ -98,6 +100,30 @@ def test_base32_round_trip():
     assert r.stdout == "pecan"
 
 
+def test_lesson1_basic_identity_commands():
+    r1 = run("whoami")
+    r2 = run("pwd")
+    r3 = run("hostname")
+    assert r1.returncode == 0 and r1.stdout.strip() != ""
+    assert r2.returncode == 0 and r2.stdout.strip().startswith("/")
+    assert r3.returncode == 0 and r3.stdout.strip() != ""
+
+
+def test_lesson1_file_create_and_remove(tmp_path):
+    r = run(
+        f"cd {tmp_path} && mkdir my_first_lab && cd my_first_lab && "
+        "echo 'hello kali' > notes.txt && cat notes.txt && rm notes.txt && "
+        "cd .. && rmdir my_first_lab"
+    )
+    assert "hello kali" in r.stdout
+
+
+def test_man_page_exists_without_interactive_pager():
+    # Equivalent to checking that `man ls` is available in this environment.
+    r = run("man -w ls")
+    assert r.returncode == 0 and r.stdout.strip() != ""
+
+
 # --------------------------------------------------------------------------- #
 # Lesson 3 — Cryptography / hashing
 # --------------------------------------------------------------------------- #
@@ -124,6 +150,24 @@ def test_openssl_encrypt_decrypt_round_trip(tmp_path):
         f"openssl enc -d -aes-256-cbc -pbkdf2 -pass pass:test123 -in {enc}"
     )
     assert r.stdout == "pecan{crypto}"
+
+
+def test_caesar_bruteforce_python_snippet():
+    r = run(
+        "python3 - <<'PY'\n"
+        "ct = 'Khoor'\n"
+        "for s in range(26):\n"
+        "    out = ''.join(chr((ord(c)-base+s)%26+base) if c.isalpha() else c "
+        "for c in ct for base in [65 if c.isupper() else 97])\n"
+        "    print(f'shift {s:2}: {out}')\n"
+        "PY"
+    )
+    assert "shift 23: Hello" in r.stdout
+
+
+def test_xor_python_snippet():
+    r = run("python3 -c \"print(bytes([b ^ 0x42 for b in b'\\x32\\x27\\x21\\x23\\x2c']).decode())\"")
+    assert r.stdout.strip() == "pecan"
 
 
 # --------------------------------------------------------------------------- #
@@ -203,12 +247,47 @@ def test_radare2_version():
     assert "radare2" in r.stdout.lower()
 
 
+def test_gdb_info_files_command():
+    r = run('gdb -q /bin/ls -ex "info files" -ex "quit"')
+    assert 'Symbols from "' in (r.stdout + r.stderr)
+
+
+def test_pwn_cyclic_pattern_prefix():
+    r = run(
+        "python3 - <<'PY'\n"
+        "import string\n"
+        "alphabet = string.ascii_lowercase\n"
+        "pattern = ''.join(a + b + c for a in alphabet for b in alphabet for c in alphabet)\n"
+        "print(pattern[:24])\n"
+        "PY"
+    )
+    assert r.stdout.strip() == "aaaaabaacaadaaeaafaagaah"
+
+
+def test_little_endian_pack_example():
+    r = run("python3 -c \"import struct; print(struct.pack('<I', 0x41424344).hex())\"")
+    assert r.stdout.strip() == "44434241"
+
+
 # --------------------------------------------------------------------------- #
 # Lesson 10 — Passwords & hashes
 # --------------------------------------------------------------------------- #
 def test_hashid_identifies_md5():
     r = run("hashid 482c811da5d5b4bc6d497ffa98491e38")
     assert "MD5" in r.stdout
+
+
+def test_john_cracks_known_md5(tmp_path):
+    hash_file = tmp_path / "hash.txt"
+    wordlist = tmp_path / "words.txt"
+    wordlist.write_text("letmein\n")
+    hash_file.write_text("0d107d09f5bbe40cade3de5c71e9e9b7\n")  # letmein
+    run(
+        f"john --format=raw-md5 --wordlist={wordlist} {hash_file}",
+        timeout=120,
+    )
+    shown = run(f"john --show --format=raw-md5 {hash_file}")
+    assert "letmein" in shown.stdout.lower()
 
 
 # --------------------------------------------------------------------------- #
@@ -241,6 +320,39 @@ def test_curl_fetches_page():
     # Lessons 4 & 5: fetching a page with curl (recon basics).
     r = run('curl -s --max-time 20 https://example.com')
     assert "Example Domain" in r.stdout
+
+
+@pytest.mark.network
+@requires_net
+def test_whois_returns_output():
+    r = run("whois example.com | head -n 5")
+    assert r.returncode == 0 and r.stdout.strip() != ""
+
+
+@pytest.mark.network
+@requires_net
+def test_nslookup_resolves_vulnweb():
+    r = run("nslookup testphp.vulnweb.com")
+    assert "Address" in r.stdout
+
+
+@pytest.mark.network
+@requires_net
+def test_whatweb_detects_target():
+    r = run("whatweb http://testphp.vulnweb.com", timeout=120)
+    assert "testphp.vulnweb.com" in r.stdout.lower()
+
+
+@pytest.mark.network
+@requires_net
+def test_web_parameter_probe_endpoint_responds():
+    r = run('curl -s "http://testphp.vulnweb.com/listproducts.php?cat=1"')
+    assert "AcuArt" in r.stdout or "listproducts" in r.stdout.lower()
+
+
+def test_sqlmap_version():
+    r = run("sqlmap --version")
+    assert r.returncode == 0 and r.stdout.strip() != ""
 
 
 @pytest.mark.network

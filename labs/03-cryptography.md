@@ -111,7 +111,7 @@ pecan{crypto}
 
 ## ✅ Challenge
 
-1. The string `pecan` was Caesar-shifted to `ujहjs`… use CyberChef _ROT13 Brute
+1. The string `pecan` was Caesar-shifted to `ujhfs` (shift 5). Use CyberChef _ROT13 Brute
    Force_ on `crpna{f1ggvat}` and read the flag.
 2. Hash your own name with `sha256sum`. Is the output always 64 hex characters?
 3. Try **Cryptography → _Take note_** and **_Climbing_** on

@@ -50,13 +50,13 @@ flowchart TD
     L1 --> L2[Lesson 2: CyberChef]
     L2 --> L3[Lesson 3: Cryptography]
     L1 --> L4[Lesson 4: OSINT & Wayback Machine]
-    L1 --> L5[Lesson 5: Web Recon & Exploits]
+    L1 --> L5[Lesson 5: Web Recon & Exploitation Basics]
     L3 --> L6[Lesson 6: Steganography]
     L6 --> L7[Lesson 7: Forensics]
-    L7 --> L8[Lesson 8: Reverse Engineering]
+    L7 --> L8[Lesson 8: Reverse Engineering & Binary Exploitation]
     L5 --> L9[Lesson 9: Network Scanning]
     L8 --> L10[Lesson 10: Passwords & Hashes]
-    L9 --> L11[Lesson 11: Compete in PECAN+ CTF]
+    L9 --> L11[Lesson 11: Workflow Playbook & PECAN+ CTF]
     L10 --> L11
 ```
 
@@ -133,7 +133,7 @@ flowchart TD
 ### Lesson 5 — Web Reconnaissance & Exploits
 
 - **Goal:** Inspect a website's source, headers, `robots.txt` and hidden
-  directories.
+  directories, then test parameters safely for common web exploit paths.
 - **Material:** [labs/05-web-recon.md](labs/05-web-recon.md)
 - **Key commands:**
   ```bash
@@ -141,6 +141,7 @@ flowchart TD
   curl -s http://testphp.vulnweb.com | grep -i "flag\|hidden\|TODO"
   whatweb http://testphp.vulnweb.com
   gobuster dir -u http://testphp.vulnweb.com -w /usr/share/wordlists/dirb/common.txt
+  sqlmap --version
   ```
 - **CTF link:** Web exploits → _Bite my shiny metal_ (robots.txt), _Lamb Source 1_
   (page source), _Mr Robot_ (hidden directory).
@@ -171,9 +172,10 @@ flowchart TD
   ```
 - **CTF link:** Forensics → _3D flag_, _ABC company_ (pcap), _HackersAttack_, _DoS'ed out_.
 
-### Lesson 8 — Reverse Engineering Basics
+### Lesson 8 — Reverse Engineering & Binary Exploitation Basics
 
-- **Goal:** Inspect a compiled program to recover its secret.
+- **Goal:** Inspect a compiled program to recover its secret, then apply core
+  pwn workflow concepts (debugging, offsets, endianness).
 - **Material:** [labs/08-reverse-engineering.md](labs/08-reverse-engineering.md)
 - **Key commands:**
   ```bash
@@ -181,6 +183,7 @@ flowchart TD
   strings program | grep pecan        # easy wins first
   objdump -d program | less           # disassemble
   radare2 -A program                  # interactive analysis (q to quit)
+  gdb -q /bin/ls -ex "info files" -ex "quit" | head -n 8
   ```
 - **CTF link:** Reverse Engineering → _Love letter_.
 
@@ -198,15 +201,16 @@ flowchart TD
 - **Key commands:** `hashid`, `john`, `md5sum`, `sha256sum`
 - **CTF link:** Supports Cryptography & Forensics challenges.
 
-### Lesson 11 — Compete in the PECAN+ CTF 🏁
+### Lesson 11 — CTF Workflow Playbook & Competition 🏁
 
-- **Goal:** Apply everything to live challenges and capture flags.
+- **Goal:** Apply a repeatable competition workflow, then solve live challenges
+  and capture flags.
 - **Material:** [labs/11-ctf-competition.md](labs/11-ctf-competition.md)
 - **Workflow:**
-  1. Open **https://practice.pecanplus.org/?page=challenges**.
-  2. Start with **Beginner (1 lock)** challenges in each category.
-  3. Submit flags in the `pecan{...}` format.
-  4. Keep a write-up of each solve (great revision and portfolio material).
+  1. Triage challenge list and bank quick beginner solves first.
+  2. Use a consistent solve loop: identify category, run fast checks, switch tools once.
+  3. Time-box blockers and hand off clean notes to teammates.
+  4. Open **https://practice.pecanplus.org/?page=challenges** and submit flags in `pecan{...}` format.
 - **Stretch:** Register for the real competition via
   [pecanplus.org/register.html](https://pecanplus.org/register.html).
 

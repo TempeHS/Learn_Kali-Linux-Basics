@@ -12,10 +12,10 @@ no messy install, no risk to your own computer.
 
 ## Description
 
-This repository replaces the older Python/Flask template with a self-contained
-Kali Linux environment. When the container builds you get the official
-`kalilinux/kali-rolling` image plus the tools needed for an introductory cyber
-security unit: the Linux command line, network discovery, web reconnaissance,
+This repository is a self-contained Kali Linux learning environment for
+introductory cyber security and CTF practice. When the container builds you get
+the official `kalilinux/kali-rolling` image plus the tools needed for the
+curriculum: the Linux command line, network discovery, web reconnaissance,
 password basics and a little Python scripting.
 
 Everything runs inside a **disposable container** as a normal `student` user, so
@@ -66,21 +66,21 @@ Then work through the lessons in order, starting with
 
 ## Lessons
 
-| #   | Lesson                                                         | Skill                          |
-| --- | -------------------------------------------------------------- | ------------------------------ |
-| 00  | [Ethics & Safety](labs/00-ethics-and-safety.md)                | Stay legal and responsible     |
-| 01  | [Linux Command Line](labs/01-linux-command-line.md)            | Navigate and use the shell     |
-| 02  | [Encoding, Decoding & CyberChef](labs/02-cyberchef.md)         | Decode data with CyberChef     |
-| 03  | [Cryptography Basics](labs/03-cryptography.md)                 | Caesar, XOR, hashes, AES       |
-| 04  | [OSINT & the Wayback Machine](labs/04-osint-wayback.md)        | Find public info & old sites   |
-| 05  | [Web Reconnaissance](labs/05-web-recon.md)                     | Inspect web servers            |
-| 06  | [Steganography](labs/06-steganography.md)                      | Find data hidden in files      |
-| 07  | [Forensics](labs/07-forensics.md)                              | File carving & packet captures |
-| 08  | [Reverse Engineering](labs/08-reverse-engineering.md)          | Take a binary apart            |
-| 09  | [Network Scanning with Nmap](labs/09-network-scanning-nmap.md) | Discover hosts & ports         |
-| 10  | [Password & Hash Basics](labs/10-passwords-and-hashes.md)      | Understand password security   |
-| 11  | [Compete in the PECAN+ CTF](labs/11-ctf-competition.md)        | Capture flags 🏁               |
-| ★   | [Python for Security](labs/12-python-scripting.md)             | Bonus: automate your solves    |
+| #   | Lesson                                                                             | Skill                          |
+| --- | ---------------------------------------------------------------------------------- | ------------------------------ |
+| 00  | [Ethics & Safety](labs/00-ethics-and-safety.md)                                    | Stay legal and responsible     |
+| 01  | [Linux Command Line](labs/01-linux-command-line.md)                                | Navigate and use the shell     |
+| 02  | [Encoding, Decoding & CyberChef](labs/02-cyberchef.md)                             | Decode data with CyberChef     |
+| 03  | [Cryptography Basics](labs/03-cryptography.md)                                     | Caesar, XOR, hashes, AES       |
+| 04  | [OSINT & the Wayback Machine](labs/04-osint-wayback.md)                            | Find public info & old sites   |
+| 05  | [Web Reconnaissance & Exploitation Basics](labs/05-web-recon.md)                   | Web recon plus input testing   |
+| 06  | [Steganography](labs/06-steganography.md)                                          | Find data hidden in files      |
+| 07  | [Forensics](labs/07-forensics.md)                                                  | File carving & packet captures |
+| 08  | [Reverse Engineering & Binary Exploitation Basics](labs/08-reverse-engineering.md) | RE plus pwn foundations        |
+| 09  | [Network Scanning with Nmap](labs/09-network-scanning-nmap.md)                     | Discover hosts & ports         |
+| 10  | [Password & Hash Basics](labs/10-passwords-and-hashes.md)                          | Understand password security   |
+| 11  | [CTF Workflow Playbook & Competition](labs/11-ctf-competition.md)                  | Triage, teamwork, score points |
+| ★   | [Python for Security](labs/12-python-scripting.md)                                 | Bonus: automate your solves    |
 
 ## CTF Course
 
@@ -127,8 +127,8 @@ man nmap   # every tool has a manual — read it!
 ## Version History
 
 - 1.0
-  - Redesigned from the Python/Flask template into a Kali Linux Cyber Security
-    lab with beginner labs.
+  - Released as a Kali Linux cyber security lab with beginner-friendly lessons,
+    tests, and CTF-aligned content.
 - 0.1
   - Initial Release
 
@@ -142,4 +142,3 @@ This project is licensed under the GNU General Public License v3.0 - see the
 - [Kali Linux](https://www.kali.org/)
 - [Kali Tools documentation](https://www.kali.org/tools/)
 - [Nmap public test server: scanme.nmap.org](http://scanme.nmap.org/)
-- [TempeHS Python Flask template](https://github.com/TempeHS/TempeHS_Python-Flask_DevContainer)
