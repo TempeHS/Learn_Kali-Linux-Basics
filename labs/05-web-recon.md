@@ -11,6 +11,7 @@ do this to find their own weak spots first.
 ## Learning goals
 
 - Identify web technologies and hidden content.
+- Use `curl` to send GET and POST requests and inspect responses.
 - Test parameters safely for common web vulnerabilities.
 - Understand the basic workflow for SQL injection and input tampering.
 
@@ -35,6 +36,47 @@ curl -I http://testphp.vulnweb.com
 ```
 
 Look for headers like `Server:` and `X-Powered-By:` — they leak software names.
+
+### 2a. `curl` for GET data, POST data, and endpoint probing
+
+Basic GET request:
+
+```bash
+curl -s "http://testphp.vulnweb.com/" | head -n 10
+```
+
+GET with query parameters (using `-G` + URL encoding):
+
+```bash
+curl -sG "http://testphp.vulnweb.com/listproducts.php" \
+  --data-urlencode "cat=1" | head -n 10
+```
+
+Probe endpoint status codes quickly:
+
+```bash
+for p in / /robots.txt /admin /login.php /doesnotexist; do
+  code=$(curl -s -o /dev/null -w "%{http_code}" "http://testphp.vulnweb.com${p}")
+  printf "%-15s %s\n" "$p" "$code"
+done
+```
+
+POST form data (safe echo service example):
+
+```bash
+curl -s -X POST "https://httpbin.org/post" \
+  -d "username=student&role=learner" | head -n 20
+```
+
+POST JSON data:
+
+```bash
+curl -s -X POST "https://httpbin.org/post" \
+  -H "Content-Type: application/json" \
+  -d '{"cat":1,"note":"training"}' | head -n 20
+```
+
+Use `-i` to include headers in output, and `-v` for verbose request/response debug.
 
 ## 3. Find hidden pages and folders
 
@@ -132,5 +174,7 @@ flowchart LR
 2. Use `gobuster` and list two folders or files it discovered.
 3. Test `cat` with `1`, `2`, and `1%27` and describe what changed.
 4. Run `sqlmap --version` and explain what problem type sqlmap is designed to test.
+5. Send one POST form request and one POST JSON request to `https://httpbin.org/post`, then identify where your submitted values appear in the response.
+6. Use a small `curl` loop to probe at least 5 endpoints and report which returned `200`, `301/302`, or `404`.
 
 ➡️ Next: [Lesson 06 — Steganography](06-steganography.md)

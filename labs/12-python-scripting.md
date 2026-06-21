@@ -62,6 +62,57 @@ Run it:
 python3 headers.py
 ```
 
+## Tool 2b — A curl-style request tool (GET, POST & endpoint probing)
+
+This rebuilds the `curl` GET/POST workflow from [Lesson 05](05-web-recon.md) in
+Python. The `requests` library does everything `curl` does — send query data,
+post form or JSON bodies, and read status codes. Create `httptool.py`:
+
+```python
+import requests
+
+# --- GET with query parameters (like: curl -G --data-urlencode) ---
+resp = requests.get(
+    "http://testphp.vulnweb.com/listproducts.php",
+    params={"cat": 1},
+    timeout=5,
+)
+print("GET", resp.url, "->", resp.status_code)
+print(resp.text[:200])
+
+# --- Probe several endpoints and print status codes (like a curl loop) ---
+base = "http://testphp.vulnweb.com"
+for path in ["/", "/robots.txt", "/admin", "/login.php", "/doesnotexist"]:
+    code = requests.get(base + path, timeout=5).status_code
+    print(f"  {path:<15} {code}")
+
+# --- POST form data (like: curl -d "key=value") ---
+form = requests.post(
+    "https://httpbin.org/post",
+    data={"username": "student", "role": "learner"},
+    timeout=5,
+)
+print("POST form ->", form.json()["form"])
+
+# --- POST JSON data (like: curl -H 'Content-Type: application/json' -d '{...}') ---
+js = requests.post(
+    "https://httpbin.org/post",
+    json={"cat": 1, "note": "training"},
+    timeout=5,
+)
+print("POST json ->", js.json()["json"])
+```
+
+Run it:
+
+```bash
+python3 httptool.py
+```
+
+> `requests` auto-sets `Content-Type: application/json` when you use `json=`,
+> and URL-encodes anything in `params=` — so you rarely need to escape data by
+> hand the way you do with `curl`.
+
 ## Make it pretty with rich (optional)
 
 ```python
@@ -104,18 +155,18 @@ pip install requests beautifulsoup4 dnspython python-whois \
 These Python libraries cover the same jobs as the Kali command-line tools you
 used earlier in the course:
 
-| CTF category   | Kali tool (this course) | Python library you can pip install   | What it does                          |
-| -------------- | ----------------------- | ------------------------------------ | ------------------------------------- |
-| Web recon      | `curl`, `whatweb`       | `requests`, `beautifulsoup4`         | Fetch pages, read headers, parse HTML |
-| OSINT / DNS    | `dig`, `whois`          | `dnspython`, `python-whois`          | Look up DNS records and domain owners |
-| Cryptography   | `openssl`               | `cryptography`, `pycryptodome`       | Hashing, AES/RSA, encryption          |
-| Encoding       | `base64`, `xxd`         | `base64`, `binascii`, `codecs` (built-in) | Encode/decode data formats       |
-| Steganography  | `exiftool`, `steghide`  | `pillow`, `exifread`                 | Read image metadata and pixels        |
-| Forensics      | `binwalk`, `strings`    | `pillow`, built-in `re`              | Carve and inspect file contents       |
-| Network / pcap | `tshark`, `tcpdump`     | `scapy`                              | Build, sniff and read packets         |
-| Reverse eng.   | `objdump`, `radare2`    | `capstone`, `pwntools`               | Disassemble and analyse binaries      |
-| Port scanning  | `nmap`                  | `python-nmap`, `socket` (built-in)   | Scan hosts and ports                  |
-| Exploitation   | —                       | `pwntools`                           | The classic CTF automation toolkit    |
+| CTF category   | Kali tool (this course) | Python library you can pip install        | What it does                          |
+| -------------- | ----------------------- | ----------------------------------------- | ------------------------------------- |
+| Web recon      | `curl`, `whatweb`       | `requests`, `beautifulsoup4`              | Fetch pages, read headers, parse HTML |
+| OSINT / DNS    | `dig`, `whois`          | `dnspython`, `python-whois`               | Look up DNS records and domain owners |
+| Cryptography   | `openssl`               | `cryptography`, `pycryptodome`            | Hashing, AES/RSA, encryption          |
+| Encoding       | `base64`, `xxd`         | `base64`, `binascii`, `codecs` (built-in) | Encode/decode data formats            |
+| Steganography  | `exiftool`, `steghide`  | `pillow`, `exifread`                      | Read image metadata and pixels        |
+| Forensics      | `binwalk`, `strings`    | `pillow`, built-in `re`                   | Carve and inspect file contents       |
+| Network / pcap | `tshark`, `tcpdump`     | `scapy`                                   | Build, sniff and read packets         |
+| Reverse eng.   | `objdump`, `radare2`    | `capstone`, `pwntools`                    | Disassemble and analyse binaries      |
+| Port scanning  | `nmap`                  | `python-nmap`, `socket` (built-in)        | Scan hosts and ports                  |
+| Exploitation   | —                       | `pwntools`                                | The classic CTF automation toolkit    |
 
 ### Tool 3 — Encoding & hashing with the standard library
 
@@ -193,7 +244,7 @@ for record_type in ["A", "MX", "TXT"]:
 ### Tool 6 — Read a packet capture with Scapy
 
 This replaces `tshark`/`tcpdump` for offline analysis. You can read a `.pcap`
-file **without** admin rights (you only need root to *sniff* live traffic):
+file **without** admin rights (you only need root to _sniff_ live traffic):
 
 ```python
 from scapy.all import rdpcap
@@ -217,6 +268,9 @@ for pkt in packets[:5]:
    print the **base32** encoding (hint: `base64.b32encode`).
 5. Toolkit: run `dns.py` against a domain of your choice and read its `TXT`
    records — what do you find?
+6. Extend `httptool.py`: add a POST request that sends both a custom header
+   (e.g. `User-Agent: ctf-bot`) and form data, then print the `headers` section
+   of the `httpbin.org` response to confirm your header arrived.
 
 ## You finished the basics! 🎉
 
