@@ -1,0 +1,54 @@
+# Two containers make up the learning environment:
+#
+#   workspace - the Kali Linux toolkit students work in (built from Dockerfile).
+#   dvwa      - Damn Vulnerable Web Application: a deliberately insecure website
+#               (backed by its own database) used for safe, *offline* web-recon
+#               practice. It replaces the external testphp.vulnweb.com demo site,
+#               which is often slow or unreachable from inside a codespace.
+#
+# Both containers share a private network, so from the workspace the vulnerable
+# site is always reachable at:  http://dvwa
+# Default DVWA login is  admin / password  (set the security level to "low" on
+# the DVWA Security page to make the lab exercises behave predictably).
+services:
+  workspace:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ..:/workspaces/Learn_Kali-Linux-Basics:cached
+    # Keep the container running so VS Code can attach to it.
+    command: sleep infinity
+    depends_on:
+      - dvwa
+
+  dvwa:
+    # Official prebuilt DVWA image (Apache + PHP). It keeps its users and
+    # challenge data in the companion "db" service defined below.
+    image: ghcr.io/digininja/dvwa:latest
+    restart: unless-stopped
+    environment:
+      # Point DVWA at the "db" container instead of the default localhost.
+      - DB_SERVER=db
+    depends_on:
+      - db
+    # Expose DVWA on the host too, so it can be opened in a browser tab.
+    ports:
+      - "4280:80"
+
+  db:
+    # Database backend for DVWA. The credentials below match DVWA's built-in
+    # defaults, so no extra configuration is needed.
+    image: docker.io/library/mariadb:10
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=dvwa
+      - MYSQL_DATABASE=dvwa
+      - MYSQL_USER=dvwa
+      - MYSQL_PASSWORD=p@ssw0rd
+    volumes:
+      # Persist the database so the DVWA setup survives container restarts.
+      - dvwa-db:/var/lib/mysql
+
+volumes:
+  dvwa-db:

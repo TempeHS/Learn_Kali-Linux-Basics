@@ -21,7 +21,7 @@ file, a disk image or a captured network conversation (a **packet capture**, or
 Extensions lie. `file` reads the bytes and tells you the truth:
 
 ```bash
-convert -size 8x8 xc:red mystery
+convert -size 8x8 xc:red PNG:mystery
 file mystery
 ```
 

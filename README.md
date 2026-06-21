@@ -7,8 +7,9 @@ no messy install, no risk to your own computer.
 
 > [!IMPORTANT]
 > Only use these tools on systems you **own** or have **written permission** to
-> test, plus the public practice targets listed in the labs. Attacking systems
-> without permission is illegal. See [Lab 00](labs/00-ethics-and-safety.md).
+> test, plus the built-in DVWA container and the public practice targets listed
+> in the labs. Attacking systems without permission is illegal.
+> See [Lab 00](labs/00-ethics-and-safety.md).
 
 ## Description
 
@@ -17,6 +18,14 @@ introductory cyber security and CTF practice. When the container builds you get
 the official `kalilinux/kali-rolling` image plus the tools needed for the
 curriculum: the Linux command line, network discovery, web reconnaissance,
 password basics and a little Python scripting.
+
+It also ships a **built-in practice website**: a
+[DVWA (Damn Vulnerable Web Application)](https://github.com/digininja/DVWA)
+container starts automatically alongside Kali, so the web-recon and exploitation
+labs work **offline** with no external target. From the Kali terminal it is
+reachable at **`http://dvwa`**, and in a browser tab at
+**`http://localhost:4280`** (log in with **`admin` / `password`**, then set the
+DVWA Security level to **Low**).
 
 Everything runs inside a **disposable container** as a normal `student` user, so
 you can experiment freely and just rebuild if anything breaks.
@@ -115,17 +124,27 @@ Scripting: `python3`, `pip`, `git`.
   [.devcontainer/Dockerfile](.devcontainer/Dockerfile) and rebuild, e.g.
   `sudo apt-get update && sudo apt-get install <package>`.
 
+### DVWA practice site (Lessons 05 & 09)
+
+Need setup, login, troubleshooting, or cookie help for DVWA?
+
+- Use the dedicated guide: [DVWA Help Guide](DVWA_HELP.md)
+- Lessons that use it: [Lesson 05](labs/05-web-recon.md),
+  [Lesson 09](labs/09-network-scanning-nmap.md)
+
 ```bash
 man nmap   # every tool has a manual — read it!
 ```
 
 ## Authors
 
-- TempeHS
 - [@benpaddlejones](https://github.com/benpaddlejones)
 
 ## Version History
 
+- 2.0
+  - Added a built-in DVWA practice site so the web-recon and exploitation labs
+    run offline, with matching lab updates and database-readiness tests.
 - 1.0
   - Released as a Kali Linux cyber security lab with beginner-friendly lessons,
     tests, and CTF-aligned content.
@@ -142,3 +161,5 @@ This project is licensed under the GNU General Public License v3.0 - see the
 - [Kali Linux](https://www.kali.org/)
 - [Kali Tools documentation](https://www.kali.org/tools/)
 - [Nmap public test server: scanme.nmap.org](http://scanme.nmap.org/)
+- [DVWA (Damn Vulnerable Web Application)](https://github.com/digininja/DVWA)
+- [DVWA Docker image](https://github.com/digininja/DVWA/pkgs/container/dvwa)

@@ -1,11 +1,22 @@
 {
   "name": "Kali Linux Cyber Security Basics",
-  "build": {
-    "dockerfile": "Dockerfile"
-  },
+  // Two containers are started from docker-compose.yml: the Kali "workspace"
+  // students work in, and a self-contained DVWA vulnerable web app reachable
+  // at http://dvwa for safe, offline web-recon practice.
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "workspace",
+  "workspaceFolder": "/workspaces/Learn_Kali-Linux-Basics",
   "remoteUser": "student",
   "hostRequirements": {
     "cpus": 2
+  },
+  // Open the DVWA web UI in a browser tab on http://localhost:4280
+  "forwardPorts": [4280],
+  "portsAttributes": {
+    "4280": {
+      "label": "DVWA (vulnerable web app)",
+      "onAutoForward": "silent"
+    }
   },
   "waitFor": "onCreateCommand",
   "updateContentCommand": "",

@@ -19,7 +19,7 @@ open a disassembler.
 ## Part A — Identify the binary
 
 ```bash
-file /usr/bin/python3
+file -L /usr/bin/python3
 ```
 
 Expected output (an ELF is a Linux executable):

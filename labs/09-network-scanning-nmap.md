@@ -5,8 +5,15 @@ have open. Open ports are doors into a computer — knowing which are open is th
 first step in both attacking _and_ defending.
 
 > [!IMPORTANT]
-> We only scan **`scanme.nmap.org`**, which Nmap provides for legal practice.
-> Do not scan anything else without permission. (See [Lesson 00](00-ethics-and-safety.md).)
+> Over the internet we only scan **`scanme.nmap.org`**, which Nmap provides for
+> legal practice. Do not scan anything else without permission.
+> (See [Lesson 00](00-ethics-and-safety.md).)
+
+> [!TIP]
+> No internet? This repo ships a **built-in DVWA** target you can scan offline.
+> From the Kali terminal it answers to the hostname **`dvwa`**, e.g.
+> `nmap dvwa`. It only runs a web server, so expect to see port **80/tcp** open.
+> Need DVWA setup/troubleshooting details? See [DVWA Help Guide](../DVWA_HELP.md).
 
 ## Ports in 30 seconds
 
@@ -57,6 +64,21 @@ nmap -p 22,80,443 scanme.nmap.org
 nmap -sV scanme.nmap.org -oN my_scan.txt
 cat my_scan.txt
 ```
+
+## Offline practice on the built-in DVWA
+
+If you can't reach the internet, scan the local DVWA container instead:
+
+```bash
+# Find its open ports (expect 80/tcp = HTTP)
+nmap dvwa
+
+# Identify the web server software behind the open port
+nmap -sV -p 80 dvwa
+```
+
+This pairs nicely with [Lesson 05 — Web Recon](05-web-recon.md), which attacks
+that same web server.
 
 ## How it works
 
