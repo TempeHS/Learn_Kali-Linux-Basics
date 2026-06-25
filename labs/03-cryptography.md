@@ -41,6 +41,23 @@ shift 23: Hello
 
 > In CyberChef this is the **ROT13 Brute Force** operation — much easier!
 
+## Common ciphers quick table
+
+Use this as a fast "what am I looking at?" guide during CTF challenges.
+
+| Cipher / format               | What it is                            | Typical clue in challenge data                          | First thing to try                             |
+| ----------------------------- | ------------------------------------- | ------------------------------------------------------- | ---------------------------------------------- |
+| Caesar / ROT13                | Letters shifted by a fixed amount     | Text still looks word-like but wrong (`crpna`, `uryyb`) | CyberChef `ROT13 Brute Force` or `tr`          |
+| Vigenere                      | Caesar with a repeating keyword       | Looks like random letters; hint mentions a "key word"   | CyberChef `Vigenere Decode` (test likely keys) |
+| Atbash                        | Alphabet mirrored (`a<->z`, `b<->y`)  | Short weird text; often in beginner crypto/re puzzles   | CyberChef `Atbash`                             |
+| Rail Fence                    | Letters rearranged in zig-zag rows    | No symbols, but letters are scrambled by position       | CyberChef `Rail Fence Cipher Decode`           |
+| Affine                        | Math-based substitution over alphabet | Challenge mentions `ax + b` or "mod 26"                 | CyberChef `Affine Cipher Brute Force`          |
+| XOR (single-byte)             | Each byte combined with a key byte    | Non-printable bytes / hex, hint says XOR                | CyberChef `XOR Brute Force` or Python          |
+| Base64 (encoding, not cipher) | Text encoded to a transferable format | `A-Za-z0-9+/` and maybe trailing `=`                    | `base64 -d` or CyberChef `From Base64`         |
+
+> Tip: many CTF tasks are layered. Decode one step, then re-check the output
+> with this table again.
+
 ## Part B — XOR
 
 XOR with a single byte is a classic beginner cipher. CyberChef's **XOR Brute
@@ -108,6 +125,38 @@ Expected output of the decrypt step:
 ```
 pecan{crypto}
 ```
+
+## Part E — How to solve "climbing" cipher challenges
+
+Some CTF crypto tasks get harder in steps ("climbing"): decode layer 1, then
+layer 2, then layer 3. Treat them like a staircase.
+
+Use this order each time:
+
+1. Check if it looks like Base64 (`A-Za-z0-9+/` with possible `=` at the end).
+2. If not, check hex (`0-9a-f` pairs) or binary (`0` and `1` only).
+3. If it looks like shifted text, brute-force Caesar/ROT.
+4. Repeat until the result becomes readable text/flag.
+
+Quick terminal ladder example:
+
+```bash
+# Step 1: decode Base64
+echo "Y3JwbmF7ZjFnZ3ZhdH0=" | base64 -d
+
+# Step 2: if it now looks shifted, try ROT13
+echo "crpna{f1ggvat}" | tr 'A-Za-z' 'N-ZA-Mn-za-m'
+```
+
+Expected final style of output:
+
+```
+pecan{...}
+```
+
+In CyberChef, this is just a recipe chain:
+
+- `From Base64` -> `ROT13` (or `ROT13 Brute Force` if unsure).
 
 ## ✅ Challenge
 

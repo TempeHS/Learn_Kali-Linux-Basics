@@ -41,6 +41,24 @@ job is to recognise the format and reverse it. The best tool for this is
 
 Proving you can do it without the GUI cements the skill.
 
+### If CyberChef feels confusing, use this simple fallback
+
+When a challenge gives you a file/executable and you are stuck:
+
+1. Pull readable text first with `strings`.
+2. Look for Base64-looking chunks (letters/digits/`+`/`/`/`=`).
+3. Decode candidates one by one with `base64 -d`.
+
+Example workflow:
+
+```bash
+strings challenge_file | grep -E "[A-Za-z0-9+/=]{16,}"
+echo "cGVjYW57aGVsbG99" | base64 -d
+```
+
+If the output is still unreadable, it may be encoded again. Try another step
+such as hex decode or ROT13.
+
 ```bash
 # Base64
 echo -n "pecan{hello}" | base64

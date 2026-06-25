@@ -57,6 +57,21 @@ the terminal:
 | `openssl enc -aes-256-cbc -pbkdf2 -pass pass:key -in msg.txt -out msg.enc` | _(no output; creates `msg.enc`)_                                                    |
 | `openssl enc -d -aes-256-cbc -pbkdf2 -pass pass:key -in msg.enc`           | the original plaintext of `msg.txt`                                                 |
 
+### Common ciphers quick guide
+
+| Cipher / format                 | Typical clue                                        | First thing to try                     |
+| ------------------------------- | --------------------------------------------------- | -------------------------------------- |
+| Caesar / ROT13                  | text looks word-like but shifted (`uryyb`, `crpna`) | CyberChef `ROT13 Brute Force` or `tr`  |
+| Vigenere                        | hint mentions a keyword; letters look random        | CyberChef `Vigenere Decode`            |
+| Atbash                          | short weird text, substitution-style puzzle         | CyberChef `Atbash`                     |
+| Rail Fence                      | letters scrambled by position/rows                  | CyberChef `Rail Fence Cipher Decode`   |
+| Affine                          | hint includes `ax + b` or `mod 26`                  | CyberChef `Affine Cipher Brute Force`  |
+| XOR (single-byte)               | bytes/hex look noisy; challenge says XOR            | CyberChef `XOR Brute Force`            |
+| Base64 (encoding, not a cipher) | `A-Za-z0-9+/` with optional trailing `=`            | `base64 -d` or CyberChef `From Base64` |
+
+> Tip: if one step produces new gibberish, it is probably layered. Decode one
+> layer at a time and re-check the result.
+
 ---
 
 ## 4. OSINT & the Wayback Machine
@@ -75,16 +90,16 @@ the terminal:
 
 ## 5. Web reconnaissance & exploitation basics
 
-| Command                                                       | Expected output                                              |
-| ------------------------------------------------------------- | ------------------------------------------------------------ |
-| `curl -s http://testphp.vulnweb.com/robots.txt`               | `User-agent: *` and `Disallow:` lines (paths the site hides) |
-| `curl -s URL \| grep -i "flag\|hidden\|TODO\|<!--"`           | suspicious comments / hidden text in the page source         |
-| `curl -sI URL`                                                | HTTP response headers (`Server:`, `X-Powered-By:`)           |
-| `whatweb http://testphp.vulnweb.com`                          | a one-line fingerprint of the site's tech stack              |
-| `gobuster dir -u URL -w /usr/share/wordlists/dirb/common.txt` | discovered paths with `Status: 200/301`                      |
-| `nikto -h URL`                                                | a list of potential web server issues                        |
-| `curl -s "http://testphp.vulnweb.com/listproducts.php?cat=1%27" \| head -n 20` | SQL-related error text can indicate injectable input |
-| `sqlmap --version`                                            | installed version string                                     |
+| Command                                                                        | Expected output                                              |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------ |
+| `curl -s http://testphp.vulnweb.com/robots.txt`                                | `User-agent: *` and `Disallow:` lines (paths the site hides) |
+| `curl -s URL \| grep -i "flag\|hidden\|TODO\|<!--"`                            | suspicious comments / hidden text in the page source         |
+| `curl -sI URL`                                                                 | HTTP response headers (`Server:`, `X-Powered-By:`)           |
+| `whatweb http://testphp.vulnweb.com`                                           | a one-line fingerprint of the site's tech stack              |
+| `gobuster dir -u URL -w /usr/share/wordlists/dirb/common.txt`                  | discovered paths with `Status: 200/301`                      |
+| `nikto -h URL`                                                                 | a list of potential web server issues                        |
+| `curl -s "http://testphp.vulnweb.com/listproducts.php?cat=1%27" \| head -n 20` | SQL-related error text can indicate injectable input         |
+| `sqlmap --version`                                                             | installed version string                                     |
 
 ---
 
@@ -116,15 +131,15 @@ the terminal:
 
 ## 8. Reverse engineering & binary exploitation basics
 
-| Command                         | Expected output                             |
-| ------------------------------- | ------------------------------------------- |
-| `file program`                  | `ELF 64-bit LSB executable, x86-64, ...`    |
-| `strings program \| grep flag`  | any flag stored as plain text in the binary |
-| `objdump -f program`            | `architecture: i386:x86-64 ...` header info |
-| `objdump -d program \| less`    | the full disassembly (press `q` to quit)    |
-| `radare2 -v`                    | `radare2 6.0.5 0 @ linux-x86-64`            |
-| `radare2 -A program` then `afl` | analysis loaded; `afl` lists all functions  |
-| `gdb -q /bin/ls -ex "info files" -ex "quit" \| head -n 8` | includes `Symbols from "/bin/ls".`         |
+| Command                                                                  | Expected output                             |
+| ------------------------------------------------------------------------ | ------------------------------------------- |
+| `file program`                                                           | `ELF 64-bit LSB executable, x86-64, ...`    |
+| `strings program \| grep flag`                                           | any flag stored as plain text in the binary |
+| `objdump -f program`                                                     | `architecture: i386:x86-64 ...` header info |
+| `objdump -d program \| less`                                             | the full disassembly (press `q` to quit)    |
+| `radare2 -v`                                                             | `radare2 6.0.5 0 @ linux-x86-64`            |
+| `radare2 -A program` then `afl`                                          | analysis loaded; `afl` lists all functions  |
+| `gdb -q /bin/ls -ex "info files" -ex "quit" \| head -n 8`                | includes `Symbols from "/bin/ls".`          |
 | `python3 -c "import struct; print(struct.pack('<I', 0x41424344).hex())"` | `44434241` (little-endian)                  |
 
 ---

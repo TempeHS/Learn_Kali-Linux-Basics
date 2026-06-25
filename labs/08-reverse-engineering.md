@@ -50,6 +50,35 @@ strings /usr/bin/python3 | grep -i "version" | head -3
 
 In a real challenge you'd run `strings ./program | grep -i pecan`.
 
+### Important beginner workflow: strings first, then decode
+
+A lot of binaries hide a flag as encoded text, not plain text. Use this exact
+flow:
+
+1. Run `strings` on the executable.
+2. Find suspicious long text chunks.
+3. If a chunk looks like Base64, decode it.
+
+```bash
+# 1) Pull readable text from the executable
+strings ./program > out.txt
+
+# 2) Find possible Base64 chunks
+grep -E "[A-Za-z0-9+/=]{16,}" out.txt
+
+# 3) Decode one candidate
+echo "cGVjYW57aGVsbG99" | base64 -d
+```
+
+Expected decode output:
+
+```
+pecan{hello}
+```
+
+If decode output still looks scrambled, it is probably layered (for example:
+Base64 then ROT13). Send that output to CyberChef and chain operations.
+
 ## Part C — Disassemble
 
 `objdump -d` turns machine code back into assembly. You're looking for compared

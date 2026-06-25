@@ -5,6 +5,22 @@ is a competition where you solve security puzzles to uncover hidden **flags** �
 short strings in the form `pecan{...}`. You now have a tool and a method for
 every category. Time to play.
 
+## CTF explained at high-school level
+
+Think of a CTF like a school scavenger hunt mixed with logic puzzles:
+
+- A teacher gives clues (the challenge).
+- You investigate with tools (Linux commands, CyberChef, browser tools).
+- You find the secret code (`pecan{...}`) and submit it.
+- You get points and move up the leaderboard.
+
+You are **not** breaking random real websites. You are solving legal practice
+puzzles designed for learning.
+
+If you want a quick intro video before starting:
+
+- [What Is a CTF? (YouTube)](https://www.youtube.com/watch?v=mb0taQQBlQY)
+
 > [!IMPORTANT]
 > Only attack the official practice challenges and your own machines.
 > See [Lesson 00](00-ethics-and-safety.md).
@@ -17,6 +33,13 @@ every category. Time to play.
 2. You find the hidden flag, e.g. `pecan{y0u_f0und_me}`.
 3. You submit the flag for points. Harder challenges = more points.
 4. Difficulty is shown with locks: 🔓 Beginner · 🔓🔓 Intermediate · 🔓🔓🔓 Advanced.
+
+### What a competition round feels like
+
+1. Start with easy flags to build confidence and points.
+2. Save hard ones for later instead of getting stuck early.
+3. Share notes with teammates so no work is wasted.
+4. Submit often; small points add up quickly.
 
 ## Workflow playbook (how to score faster)
 
@@ -77,6 +100,9 @@ grep -ri "pecan{" .
 
 # Hidden in a binary or image?
 strings -n 6 file | grep -i pecan
+
+# If strings shows Base64-looking text, decode it
+echo "cGVjYW57aGVsbG99" | base64 -d
 
 # Encoded? Try Base64.
 cat file | base64 -d 2>/dev/null | grep -i pecan
