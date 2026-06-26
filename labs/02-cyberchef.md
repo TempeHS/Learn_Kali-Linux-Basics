@@ -126,10 +126,10 @@ OBSWGYLO
 
 ## ✅ Challenge
 
-1. Decode this with CyberChef **and** the terminal: `cGVjYW57YzBkZWR9`
-   _(answer should look like `pecan{...}`)_.
-2. What is `pecan` in binary? (CyberChef: _To Binary_.)
-3. Try the practice challenge **Cryptography → _Encoded_** at
+1. **Do:** Decode `cGVjYW57YzBkZWR9` with CyberChef **and** the terminal.
+2. **Verify:** Confirm your decoded output matches the `pecan{...}` flag format.
+3. **Explain:** State why this example is encoding rather than encryption.
+4. **Practice:** Complete **Cryptography → _Encoded_** at
    [practice.pecanplus.org](https://practice.pecanplus.org/?page=challenges).
 
 ➡️ Next: [Lesson 03 — Cryptography Basics](03-cryptography.md)

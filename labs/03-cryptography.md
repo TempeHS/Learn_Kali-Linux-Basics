@@ -160,10 +160,10 @@ In CyberChef, this is just a recipe chain:
 
 ## ✅ Challenge
 
-1. The string `pecan` was Caesar-shifted to `ujhfs` (shift 5). Use CyberChef _ROT13 Brute
-   Force_ on `crpna{f1ggvat}` and read the flag.
-2. Hash your own name with `sha256sum`. Is the output always 64 hex characters?
-3. Try **Cryptography → _Take note_** and **_Climbing_** on
+1. **Do:** Use CyberChef _ROT13 Brute Force_ on `crpna{f1ggvat}` and recover the flag.
+2. **Verify:** Hash your own name with `sha256sum` and confirm it is 64 hex characters.
+3. **Explain:** Describe why hashing is one-way while AES decryption is reversible.
+4. **Practice:** Complete **Cryptography → _Take note_** and **_Climbing_** on
    [practice.pecanplus.org](https://practice.pecanplus.org/?page=challenges).
 
 ➡️ Next: [Lesson 04 — OSINT & the Wayback Machine](04-osint-wayback.md)

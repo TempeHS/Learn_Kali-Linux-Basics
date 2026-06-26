@@ -260,17 +260,14 @@ for pkt in packets[:5]:
 
 ## ✅ Challenge
 
-1. Add port `21` and `8080` to `portcheck.py` and re-run it.
-2. Change `headers.py` to also print the `Date` header.
-3. Bonus: make `portcheck.py` ask the user for the target with
-   `target = input("Target: ")`.
-4. Toolkit: install the packages above in a venv and edit `encode.py` to also
-   print the **base32** encoding (hint: `base64.b32encode`).
-5. Toolkit: run `dns.py` against a domain of your choice and read its `TXT`
-   records — what do you find?
-6. Extend `httptool.py`: add a POST request that sends both a custom header
-   (e.g. `User-Agent: ctf-bot`) and form data, then print the `headers` section
-   of the `httpbin.org` response to confirm your header arrived.
+1. **Do:** Add ports `21` and `8080` to `portcheck.py`, then make
+   `portcheck.py` ask for the target with `target = input("Target: ")`.
+2. **Verify:** Re-run `portcheck.py` and `headers.py`, and confirm the new ports
+   and `Date` header appear in the output.
+3. **Explain:** Run `dns.py` on a domain of your choice and summarize what its
+   `TXT` records tell you.
+4. **Practice:** Extend `httptool.py` with a POST request that sends a custom
+   header and form data, then confirm the header appears in the `httpbin` response.
 
 ## You finished the basics! 🎉
 

@@ -87,10 +87,11 @@ flowchart LR
 - **Penetration test (pentest)** — a _permitted_ simulated attack to find and
   fix weaknesses.
 
-## ✅ Check your understanding
+## ✅ Challenge
 
-1. Your friend says "scan my phone". Are you allowed to? Why or why not?
-2. Name two targets you _are_ allowed to scan in this course.
-3. What is the difference between a vulnerability and an exploit?
+1. **Do:** Decide whether the request "scan my phone" is allowed in this course.
+2. **Verify:** List two targets you _are_ allowed to scan here.
+3. **Explain:** Describe the difference between a vulnerability and an exploit.
+4. **Practice:** Write the one golden rule in your own words.
 
 ➡️ Next: [Lesson 01 — Linux Command Line](01-linux-command-line.md)

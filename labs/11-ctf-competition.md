@@ -110,6 +110,37 @@ exiftool file | grep -i pecan
 binwalk -e file && grep -ri pecan _file.extracted/
 ```
 
+## Secret-leak triage (Git and env files)
+
+Many miscellaneous web CTF tasks hide flags in source history or config mistakes.
+Always check these early when a challenge gives you source code or a repo.
+
+Quick reference: [Git and env secret leak checks](../CHEATSHEET.md#git-and-env-secret-leak-checks).
+
+```bash
+# Current tree: look for obvious secret-like files
+find . -maxdepth 3 -type f \( -name "*.env" -o -name "*.bak" -o -name "*config*" \)
+
+# Search tracked files for common secret patterns
+grep -RInE "pecan\{|flag\{|API_KEY|SECRET|TOKEN|PASSWORD" .
+
+# If this is a git repo, inspect recent commits and changed files
+git log --oneline -n 10
+git show --name-only --oneline HEAD
+```
+
+If the challenge is clearly git-history based, check earlier commits too:
+
+```bash
+git log --all --name-only --pretty=format:"commit %h %s" | head -n 80
+```
+
+Expected clues:
+
+- Secrets removed in a newer commit but present in older history.
+- `.env` or backup files accidentally committed.
+- Hard-coded tokens/flags in source comments or test data.
+
 ## Suggested first solves (all Beginner 🔓)
 
 Work these in order — each maps directly to a lesson you've finished:
@@ -120,6 +151,13 @@ Work these in order — each maps directly to a lesson you've finished:
 4. **OSINT → _Kidnapped part 1_** — search public info + Wayback.
 5. **Forensics → _3D flag_** — identify and open the file.
 6. **Reverse Engineering → _Love letter_** — `strings` the binary.
+
+## ✅ Challenge
+
+1. **Do:** Choose three beginner challenges from different categories and solve them.
+2. **Verify:** Record the exact commands you used and one key clue for each solve.
+3. **Explain:** Write a one-sentence handoff note for one unsolved challenge.
+4. **Practice:** Submit your solved flags and summarize which technique worked best.
 
 ## Keep a write-up
 
@@ -137,6 +175,7 @@ Suggested template for each solve:
 - Initial clue and hypothesis.
 - Commands tried.
 - Final flag and why it worked.
+- Any dead ends (what did not work) so teammates avoid repeating them.
 
 ## Compete for real
 

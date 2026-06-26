@@ -70,9 +70,10 @@ history                          # see commands you've run
 
 ## ✅ Challenge
 
-1. Create a folder called `recon`, move into it, and create a file
-   `targets.txt` containing the line `scanme.nmap.org`.
-2. Display the file to prove it worked.
-3. Use `man whoami` and write down what it does in one sentence.
+1. **Do:** Create a folder called `recon`, move into it, and create `targets.txt`
+   containing `scanme.nmap.org`.
+2. **Verify:** Display `targets.txt` and confirm you are still in the `recon` folder.
+3. **Explain:** Use `man whoami` and write one sentence describing what it does.
+4. **Practice:** Return to your home directory and list files with `ls -la`.
 
 ➡️ Next: [Lesson 02 — Encoding, Decoding & CyberChef](02-cyberchef.md)

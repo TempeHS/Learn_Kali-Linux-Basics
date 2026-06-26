@@ -105,10 +105,11 @@ Extract everything binwalk finds with `binwalk -e combo.bmp`.
 
 ## ✅ Challenge
 
-1. Hide your initials in an image's `Comment` and read them back.
-2. Use `binwalk -e` to extract the gzip you embedded above, then `cat` the result.
-3. Try **Steganography → _Head in the clouds_**, **_Matchy matchy_** and
-   **_The guy_** (hint: EXIF) at
+1. **Do:** Hide your initials in an image `Comment` field and read them back.
+2. **Verify:** Extract the embedded gzip with `binwalk -e` and confirm the output.
+3. **Explain:** State which tool found metadata clues vs embedded-file clues.
+4. **Practice:** Complete **Steganography → _Head in the clouds_**,
+   **_Matchy matchy_** and **_The guy_** (hint: EXIF) at
    [practice.pecanplus.org](https://practice.pecanplus.org/?page=challenges).
 
 ➡️ Next: [Lesson 07 — Forensics](07-forensics.md)

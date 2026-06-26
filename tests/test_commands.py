@@ -177,6 +177,25 @@ def test_man_page_exists_without_interactive_pager():
     assert r.returncode == 0 and r.stdout.strip() != ""
 
 
+def test_ls_help_shows_usage():
+    r = run("ls --help | head -n 3")
+    out = r.stdout.lower()
+    assert r.returncode == 0
+    assert "usage" in out and "ls" in out
+
+
+def test_grep_root_in_passwd():
+    r = run('grep "root" /etc/passwd')
+    assert r.returncode == 0
+    assert "root:" in r.stdout
+
+
+def test_pipe_passwd_into_grep_bash():
+    r = run('cat /etc/passwd | grep "bash"')
+    assert r.returncode == 0
+    assert "/bash" in r.stdout
+
+
 # --------------------------------------------------------------------------- #
 # Lesson 3 — Cryptography / hashing
 # --------------------------------------------------------------------------- #
@@ -234,6 +253,17 @@ def test_caesar_bruteforce_python_snippet():
 def test_xor_python_snippet():
     r = run("python3 -c \"print(bytes([b ^ 0x42 for b in b'\\x32\\x27\\x21\\x23\\x2c']).decode())\"")
     assert r.stdout.strip() == "pecan"
+
+
+def test_strings_and_base64_decode_candidate(tmp_path):
+    sample = tmp_path / "challenge_file"
+    sample.write_text("junk cGVjYW57aGVsbG99 morejunk", encoding="utf-8")
+    r1 = run(f"strings {sample} | grep -E '[A-Za-z0-9+/=]{{16,}}'")
+    assert r1.returncode == 0
+    assert "cGVjYW57aGVsbG99" in r1.stdout
+    r2 = run('echo "cGVjYW57aGVsbG99" | base64 -d')
+    assert r2.returncode == 0
+    assert r2.stdout == "pecan{hello}"
 
 
 # --------------------------------------------------------------------------- #
@@ -305,6 +335,17 @@ def test_pngcheck_valid_png(tmp_path):
     assert "OK" in r.stdout
 
 
+def test_memory_triage_strings_command(tmp_path):
+    mem = tmp_path / "memory.raw"
+    mem.write_bytes(b"noise token=abc123 http://example local flag{demo} end")
+    r = run(
+        f"strings -n 8 {mem} | grep -iE \"flag\\{{|token|http\" | head -n 30"
+    )
+    out = r.stdout.lower()
+    assert r.returncode == 0
+    assert "token" in out and "http" in out
+
+
 # --------------------------------------------------------------------------- #
 # Lesson 8 — Reverse engineering
 # --------------------------------------------------------------------------- #
@@ -372,6 +413,13 @@ def test_john_cracks_known_md5(tmp_path):
     assert "letmein" in shown.stdout.lower()
 
 
+def test_hydra_help_output():
+    r = run("hydra -h | head -n 20")
+    out = (r.stdout + r.stderr).lower()
+    assert r.returncode == 0
+    assert "hydra" in out
+
+
 # --------------------------------------------------------------------------- #
 # Lessons 4/5/9 — Internet-dependent commands (legal targets only)
 # --------------------------------------------------------------------------- #
@@ -425,6 +473,78 @@ def test_whatweb_detects_target():
 
 
 @requires_dvwa
+def test_getent_resolves_dvwa_host():
+    r = run("getent hosts dvwa")
+    assert r.returncode == 0
+    assert "dvwa" in r.stdout.lower()
+
+
+@requires_dvwa
+def test_curl_head_login_headers_present():
+    r = run(f"curl -sI {DVWA_URL}/login.php")
+    out = r.stdout
+    assert r.returncode == 0
+    assert "HTTP/" in out
+    assert "Content-Type" in out or "content-type" in out
+
+
+@requires_dvwa
+def test_dvwa_endpoint_probe_loop_has_expected_codes():
+    r = run(
+        "for p in / /login.php /doesnotexist; do "
+        f"code=$(curl -s -o /dev/null -w '%{{http_code}}' \"{DVWA_URL}${{p}}\"); "
+        "printf '%s %s\\n' \"$p\" \"$code\"; done"
+    )
+    out = r.stdout
+    assert r.returncode == 0
+    assert "/login.php 200" in out
+    assert "/doesnotexist 404" in out
+
+
+@pytest.mark.network
+@requires_net
+def test_httpbin_post_form_echoes_values():
+    r = run(
+        'curl -s -X POST "https://httpbin.org/post" '
+        '-d "username=student&role=learner"'
+    )
+    out = r.stdout.lower()
+    assert r.returncode == 0
+    assert '"form"' in out and '"username": "student"' in out
+
+
+@pytest.mark.network
+@requires_net
+def test_httpbin_post_json_echoes_values():
+    r = run(
+        'curl -s -X POST "https://httpbin.org/post" '
+        '-H "Content-Type: application/json" '
+        "-d '{\"id\":1,\"note\":\"training\"}'"
+    )
+    out = r.stdout.lower()
+    assert r.returncode == 0
+    assert '"json"' in out
+    assert '"note": "training"' in out
+
+
+@requires_dvwa
+def test_dirb_against_dvwa_returns_results():
+    r = run(f"dirb {DVWA_URL}", timeout=180)
+    out = r.stdout.lower()
+    assert r.returncode == 0
+    assert "dirb v" in out
+    assert "start_time" in out
+    assert "found:" in out
+
+
+def test_nikto_version_available():
+    r = run("nikto -Version")
+    out = (r.stdout + r.stderr).lower()
+    assert r.returncode == 0
+    assert "nikto" in out
+
+
+@requires_dvwa
 def test_dvwa_database_backend_ready():
     # DVWA's web server answers even with no database, but the login page then
     # shows a PHP/MySQL "Fatal error" instead of the form. This test fails (not
@@ -471,3 +591,62 @@ def test_nmap_scans_scanme():
     # Lesson 9: Nmap's official legal scanning target (TCP connect scan).
     r = run("nmap -sT -Pn -p 80 scanme.nmap.org", timeout=120)
     assert "scanme.nmap.org" in r.stdout
+
+
+@requires_dvwa
+def test_nmap_scans_local_dvwa_port_80():
+    r = run("nmap -sT -Pn -p 80 dvwa", timeout=120)
+    out = r.stdout.lower()
+    assert r.returncode == 0
+    assert "80/tcp" in out and "open" in out
+
+
+@requires_dvwa
+def test_nmap_save_output_file(tmp_path):
+    out_file = tmp_path / "my_scan.txt"
+    # In this container, raw socket scans are not permitted. Force TCP connect.
+    r = run(f"nmap -sT -Pn -sV -p 80 dvwa -oN {out_file}", timeout=120)
+    assert r.returncode == 0
+    text = out_file.read_text(encoding="utf-8", errors="replace").lower()
+    assert "nmap scan report" in text
+    assert "80/tcp" in text
+
+
+def test_python3_version_command():
+    r = run("python3 --version")
+    out = (r.stdout + r.stderr).lower()
+    assert r.returncode == 0
+    assert "python 3" in out
+
+
+def test_python_venv_creation(tmp_path):
+    env_dir = tmp_path / ".venv"
+    r = run(f"python3 -m venv {env_dir}")
+    assert r.returncode == 0
+    assert (env_dir / "bin" / "python").exists()
+
+
+def test_python_toolkit_imports_available():
+    r = run(
+        "python3 - <<'PY'\n"
+        "import requests, rich\n"
+        "print('ok')\n"
+        "PY"
+    )
+    assert r.returncode == 0
+    assert r.stdout.strip() == "ok"
+
+
+def test_git_secret_triage_commands_work_in_repo():
+    repo = "/workspaces/Learn_Kali-Linux-Basics"
+    r1 = run("git log --oneline -n 10", cwd=repo)
+    r2 = run("git show --name-only --oneline HEAD", cwd=repo)
+    r3 = run(
+        "git log --all --name-only --pretty=format:'commit %h %s' | head -n 20",
+        cwd=repo,
+    )
+    assert r1.returncode == 0 and r1.stdout.strip() != ""
+    assert r2.returncode == 0 and r2.stdout.strip() != ""
+    first = r2.stdout.splitlines()[0].split()[0]
+    assert len(first) >= 7 and all(c in "0123456789abcdef" for c in first.lower())
+    assert r3.returncode == 0 and "commit" in r3.stdout.lower()

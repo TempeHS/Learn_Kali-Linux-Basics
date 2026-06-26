@@ -72,8 +72,9 @@ flowchart TD
 
 ## ✅ Challenge
 
-1. Hash the word `qwerty` and crack it with John. How long did it take?
-2. Hash a 20-character random password and try to crack it. What happens?
-3. In your own words, why is a long passphrase safer than a short complex one?
+1. **Do:** Hash `qwerty`, crack it with John, and record how long it took.
+2. **Verify:** Hash a 20-character random password, try to crack it, and record what happened.
+3. **Explain:** In your own words, describe why a long passphrase is safer than a short complex one.
+4. **Practice:** Create your own long passphrase, hash it, and test whether John cracks it quickly.
 
 ➡️ Next: [Lesson 11 — Compete in the PECAN+ CTF](11-ctf-competition.md)

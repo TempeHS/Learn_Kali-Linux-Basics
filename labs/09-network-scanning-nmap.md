@@ -94,9 +94,9 @@ sequenceDiagram
 
 ## ✅ Challenge
 
-1. How many ports did Nmap report as `open` on `scanme.nmap.org`?
-2. What service and version is running on port 22?
-3. What does the `-sV` flag add compared to a plain scan?
-4. Save a version scan to a file and open it in the VS Code editor.
+1. **Do:** Run a scan against `scanme.nmap.org` and save a version scan to a file.
+2. **Verify:** Count open ports and identify the service/version on port 22.
+3. **Explain:** Describe what `-sV` adds compared with a plain scan.
+4. **Practice:** Run one additional targeted scan (for example, specific ports) and compare results.
 
 ➡️ Next: [Lesson 10 — Password & Hash Basics](10-passwords-and-hashes.md)

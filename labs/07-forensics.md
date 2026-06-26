@@ -100,11 +100,37 @@ tshark -r capture.pcap -T fields -e data.text 2>/dev/null | grep -i pecan
 > No capture file yet? You'll get one in **Forensics → _ABC company_**. You can
 > also capture your own traffic with `sudo tcpdump -w mycapture.pcap`.
 
+## Part E — Memory forensics triage (quick beginner method)
+
+Some CTF forensics tasks give a RAM dump (`.raw`, `.mem`, `.dmp`) instead of a
+normal file. Start with a fast triage pass before deep tooling.
+
+Quick reference: [Memory dump triage (quick wins)](../CHEATSHEET.md#memory-dump-triage-quick-wins).
+
+```bash
+# Confirm what kind of dump you have
+file memory.raw
+
+# Pull likely clues (flags, tokens, hostnames, commands)
+strings -n 8 memory.raw | grep -iE "pecan\{|flag\{|token|password|http" | head -n 30
+```
+
+If the challenge hints at processes, network activity, or command history,
+memory frameworks (for example Volatility) can be used for deeper analysis.
+But in many beginner CTFs, plain `strings` already reveals enough to pivot.
+
+Triage mindset:
+
+1. Extract obvious text clues.
+2. Group clues by theme (credentials, URLs, commands, usernames).
+3. Use each clue to search related artifacts (pcap, disk files, web pages).
+
 ## ✅ Challenge
 
-1. Run `file` on something in `/bin` (e.g. `file /bin/ls`). What type is it?
-2. Carve the gzip out of `evidence.png` with `binwalk -e` and read the flag.
-3. Try **Forensics → _3D flag_**, **_ABC company_** (pcap) and **_HackersAttack_**
-   at [practice.pecanplus.org](https://practice.pecanplus.org/?page=challenges).
+1. **Do:** Run `file` on something in `/bin` (for example, `/bin/ls`) and identify its type.
+2. **Verify:** Carve the gzip out of `evidence.png` with `binwalk -e` and confirm you recovered the hidden content.
+3. **Explain:** Create `memory.raw`, run the triage `strings` command, and explain one clue type you found.
+4. **Practice:** Complete **Forensics → _3D flag_**, **_ABC company_** (pcap), and **_HackersAttack_** at
+   [practice.pecanplus.org](https://practice.pecanplus.org/?page=challenges).
 
 ➡️ Next: [Lesson 08 — Reverse Engineering Basics](08-reverse-engineering.md)

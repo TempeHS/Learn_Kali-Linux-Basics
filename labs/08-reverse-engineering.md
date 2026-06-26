@@ -191,11 +191,10 @@ This is the same idea used when building payloads for stack overflows.
 
 ## ✅ Challenge
 
-1. Run `file` on `/bin/ls` and `/usr/bin/python3`. Are they both ELF?
-2. Use `strings ... | grep` to find the Python version string in the binary.
-3. Run the gdb `info files` command and record one section name you see.
-4. Generate a 24-byte cyclic pattern and explain why offsets matter in pwn.
-5. Try **Reverse Engineering → _Love letter_** at
+1. **Do:** Run `file` on `/bin/ls` and `/usr/bin/python3`.
+2. **Verify:** Confirm whether both are ELF and record one section name from `gdb info files`.
+3. **Explain:** Generate a 24-byte cyclic pattern and explain why offsets matter in pwn.
+4. **Practice:** Complete **Reverse Engineering → _Love letter_** at
    [practice.pecanplus.org](https://practice.pecanplus.org/?page=challenges).
 
 ➡️ Next: [Lesson 09 — Network Scanning with Nmap](09-network-scanning-nmap.md)

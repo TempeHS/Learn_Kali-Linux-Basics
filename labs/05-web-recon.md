@@ -186,6 +186,59 @@ narrow and only increase depth when needed.
 - **Path traversal**: input reads files outside intended folders (`../`).
 - **Auth/session flaws**: weak tokens, predictable IDs, or missing checks.
 
+### 5e. Burp Suite core workflow (manual testing)
+
+Most web CTF players use Burp Suite to test requests quickly. Keep this simple loop:
+
+Quick reference: [Burp Suite quick workflow](../CHEATSHEET.md#burp-suite-quick-workflow)
+and [Common web exploit patterns beyond SQLi](../CHEATSHEET.md#common-web-exploit-patterns-beyond-sqli-ctf-labs-only).
+
+1. **Proxy**: intercept a real browser request.
+2. **Send to Repeater**: replay and edit one request at a time.
+3. Change one input per try (parameter, cookie, header, method).
+4. Compare response **status**, **length**, and key text differences.
+
+Starter checks to run in Repeater:
+
+- Change `id=1` to `id=2` and compare content (possible IDOR).
+- Remove auth/session cookie and resend (missing auth checks).
+- Try traversal-like input on file parameters: `../` patterns.
+- Try harmless XSS probe text (for reflection): `ctf_test_123`.
+
+> Rule: change one variable at a time. If five things change at once, you
+> cannot tell what actually caused the behavior.
+
+### 5f. High-value web patterns (what to test first)
+
+These often appear in beginner/intermediate web CTFs:
+
+- **IDOR**: change numeric/object IDs (`id=10` -> `id=11`).
+- **LFI**: file parameter reads server files (e.g. `?page=...`).
+- **RFI**: remote content include (older PHP-style challenges).
+- **SSRF**: server fetches attacker-controlled URLs.
+
+Fast manual checks (practice targets only):
+
+```bash
+# IDOR-style signal: does changing id change whose data is returned?
+curl -s "URL/profile?id=10" | head
+curl -s "URL/profile?id=11" | head
+
+# LFI-style signal: does a file parameter accept traversal-like input?
+curl -s "URL/view?page=../../../../etc/passwd" | head
+
+# SSRF-style signal: does a URL-fetch feature request internal addresses?
+curl -s "URL/fetch?url=http://127.0.0.1" | head
+```
+
+Expected style of results:
+
+- Different user data after ID change -> possible IDOR.
+- System-file-like output (`root:x:...`) -> possible LFI.
+- Internal service response/errors from URL fetch -> possible SSRF.
+
+Quick reference: [Common web exploit patterns beyond SQLi](../CHEATSHEET.md#common-web-exploit-patterns-beyond-sqli-ctf-labs-only).
+
 ## Recon workflow
 
 ```mermaid
@@ -200,12 +253,13 @@ flowchart LR
 
 ## ✅ Challenge
 
-1. What web server software and language does `http://dvwa` report in its headers?
-2. Use `gobuster` against `http://dvwa` and list two folders or files it discovered.
-3. On the DVWA SQL Injection page (Security = Low), enter `1`, then `2`, then
-   `1' OR '1'='1` and describe what changed each time.
-4. Run `sqlmap --version` and explain what problem type sqlmap is designed to test.
-5. Send one POST form request and one POST JSON request to `https://httpbin.org/post`, then identify where your submitted values appear in the response.
-6. Use a small `curl` loop to probe at least 5 endpoints on `http://dvwa` and report which returned `200`, `301/302`, or `404`.
+1. **Do:** Identify the web server software and language on `http://dvwa`, then run
+   `gobuster` and list two discovered paths.
+2. **Verify:** On DVWA SQLi (Security = Low), test `1`, `2`, and `1' OR '1'='1`,
+   then record exactly what changed each time.
+3. **Explain:** Run `sqlmap --version` and explain what class of vulnerability
+   sqlmap is designed to test.
+4. **Practice:** In Burp Repeater (or repeated `curl`), change one parameter at a
+   time and record which single change produced the strongest response difference.
 
 ➡️ Next: [Lesson 06 — Steganography](06-steganography.md)

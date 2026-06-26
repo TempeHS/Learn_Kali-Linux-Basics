@@ -126,6 +126,35 @@ Quick terminal probes:
 | `curl -s "URL?id=1%27%20AND%201=2--%20-" \| wc -c`                       | different length can indicate blind SQLi    |
 | `time curl -s "URL?id=1%27%20OR%20IF(1=1,SLEEP(5),0)--%20-" > /dev/null` | delayed response suggests time-based SQLi   |
 
+### Common web exploit patterns beyond SQLi (CTF labs only)
+
+| Pattern              | Example payload / action                  | What it checks                       |
+| -------------------- | ----------------------------------------- | ------------------------------------ |
+| Reflected XSS        | `<script>alert(1)</script>`               | input rendered as executable script  |
+| Path traversal / LFI | `../../../../etc/passwd`                  | file-read controls bypassed          |
+| Command injection    | `127.0.0.1; id` or `127.0.0.1 && whoami`  | input reaches shell commands         |
+| IDOR                 | change `?id=1001` to `?id=1002`           | missing authorization checks         |
+| SSRF                 | submit `http://127.0.0.1/` as a fetch URL | server can access internal resources |
+
+Quick web checks:
+
+| Command                                                                          | Expected output                                   |
+| -------------------------------------------------------------------------------- | ------------------------------------------------- |
+| `curl -s "URL?name=%3Cscript%3Ealert(1)%3C/script%3E" \| head`                   | reflected payload text may indicate XSS           |
+| `curl -s "URL?page=../../../../etc/passwd" \| head`                              | lines like `root:x:0:0:` can indicate LFI         |
+| `curl -s "URL?host=127.0.0.1;id" \| head`                                        | command output (`uid=...`) can indicate injection |
+| `curl -s "URL?user_id=1001" \| wc -c` then `curl -s "URL?user_id=1002" \| wc -c` | large differences can indicate IDOR               |
+
+### Burp Suite quick workflow
+
+| Step                      | What to do                                 | Expected outcome                              |
+| ------------------------- | ------------------------------------------ | --------------------------------------------- |
+| 1. Proxy capture          | run Burp, set browser proxy, browse target | request appears in Burp HTTP history          |
+| 2. Send to Repeater       | right-click interesting request            | fast manual tampering and replay              |
+| 3. Compare responses      | change one parameter each request          | clear signal: status/body/length/time changes |
+| 4. Intruder (small lists) | test short payload lists on one parameter  | quick coverage of common payloads             |
+| 5. Document findings      | save working payload + response proof      | reproducible exploit notes for write-up       |
+
 ---
 
 ## 6. Steganography
@@ -151,6 +180,15 @@ Quick terminal probes:
 | `xxd capture.bin \| head`                                             | a hexdump of the first bytes (look for magic numbers)   |
 | `tshark -r capture.pcap -Y http`                                      | the HTTP packets inside a capture file                  |
 | `tshark -r capture.pcap -Y "http" -T fields -e http.request.full_uri` | every URL requested in the capture                      |
+
+### Memory dump triage (quick wins)
+
+| Command                                                                                          | Expected output                                    |
+| ------------------------------------------------------------------------------------------------ | -------------------------------------------------- |
+| `file memory.raw`                                                                                | identifies the dump/container format               |
+| `strings -n 8 memory.raw \| grep -Ei -e "flag\\{" -e "password" -e "token" -e "session" \| head` | potential secrets/flags in readable memory strings |
+| `strings -n 8 memory.raw \| grep -Ei -e "http" -e "login" -e "cookie" -e "bearer" \| head`       | web/session artifacts from captured processes      |
+| `xxd -l 64 memory.raw`                                                                           | first bytes for quick file-signature sanity check  |
 
 ---
 
@@ -204,6 +242,15 @@ Quick terminal probes:
 | `cat file \| base64 -d \| grep flag`                | a flag that was Base64-encoded                            |
 | `exiftool * \| grep -i flag`                        | a flag tucked into a file's metadata                      |
 | `binwalk -e file && grep -ri flag _file.extracted/` | a flag inside an embedded/zipped file                     |
+
+### Git and env secret leak checks
+
+| Command                                                                                             | Expected output                                |
+| --------------------------------------------------------------------------------------------------- | ---------------------------------------------- | ------ | -------- | ----- | -------------------------------------------------------------- | ------------------------------------------ |
+| `find . -maxdepth 3 -type f \( -name ".env" -o -name "*.env" -o -name "*.pem" -o -name "id_rsa" \)` | paths of potentially sensitive files           |
+| `git log --oneline --all \| head`                                                                   | recent commit history for secret-hunting       |
+| `git grep -nEi "(api[_-]?key                                                                        | token                                          | secret | password | AWS\_ | BEGIN PRIVATE KEY)" $(git rev-list --all) 2>/dev/null \| head` | matches where secrets may exist in history |
+| `git show HEAD~1:.env 2>/dev/null \| head`                                                          | previous-version env content (if file existed) |
 
 ---
 

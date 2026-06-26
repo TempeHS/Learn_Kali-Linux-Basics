@@ -85,9 +85,10 @@ flowchart LR
 
 ## ✅ Challenge
 
-1. Find the **creation date** of `example.com` with `whois`.
-2. Use the Wayback API to find the most recent snapshot of `pecanplus.org`.
-3. Try **OSINT → _Kidnapped part 1 & 2_** and **_Missing friend_** at
+1. **Do:** Find the **creation date** of `example.com` with `whois`.
+2. **Verify:** Use the Wayback API and record the latest snapshot timestamp for `pecanplus.org`.
+3. **Explain:** Write one OSINT clue type you can recover from an old snapshot.
+4. **Practice:** Complete **OSINT → _Kidnapped part 1 & 2_** and **_Missing friend_** at
    [practice.pecanplus.org](https://practice.pecanplus.org/?page=challenges).
 
 ➡️ Next: [Lesson 05 — Web Reconnaissance](05-web-recon.md)
