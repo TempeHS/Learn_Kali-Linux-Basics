@@ -7,12 +7,12 @@ do this to find their own weak spots first.
 > [!IMPORTANT]
 > This lab targets the **DVWA (Damn Vulnerable Web Application)** that is
 > **built into this repo**. It runs in its own container and is reachable at
-> **`http://dvwa`** from the Kali terminal, and at **`http://localhost:4280`**
-> in a browser tab. It is offline and safe to attack. Do **not** point these
+> **`http://dvwa`** when using command-line tools inside the **VS Code integrated terminal**. To open it in a browser, use the **Ports** tab in VS Code to click the local address link for port **4280** (do not use localhost directly in Codespaces).
+> It is offline and safe to attack. Do **not** point these
 > tools at any other site without written permission.
 
 > [!TIP]
-> Some exercises need you to log in first. Open **`http://localhost:4280`**, log
+> Some exercises need you to log in first. Open the DVWA app from the **Ports** tab in VS Code (port 4280), log
 > in with **`admin` / `password`**, and on the **DVWA Security** page set the
 > level to **Low** so the examples behave predictably. On a brand-new container,
 > click **Setup / Reset DB** on the _Create / Reset Database_ page once.
@@ -125,13 +125,11 @@ After recon, the next CTF skill is testing user-controlled input. Always start
 with simple manual checks before automation.
 
 DVWA's vulnerable pages require you to be **logged in**, so do the one-time setup
-from the tip at the top of this lab first: log in at `http://localhost:4280`
-(`admin` / `password`), reset the database if needed, and set **Security → Low**.
+from the tip at the top of this lab first: log in using your browser, reset the database if needed, and set **Security → Low**.
 
 ### 5a. Parameter tampering (manual)
 
-Open the **SQL Injection** page in DVWA
-(`http://localhost:4280/vulnerabilities/sqli/`). In the **User ID** box, enter
+Open the **SQL Injection** page in DVWA. In the **User ID** box, enter
 different values and watch how the page reacts:
 
 - Enter `1` → you see one user (First name / Surname).

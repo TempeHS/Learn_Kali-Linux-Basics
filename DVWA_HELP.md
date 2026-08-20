@@ -7,14 +7,14 @@ Use this guide when a lab mentions the built-in DVWA target.
 This project includes a built-in **DVWA** (Damn Vulnerable Web Application)
 container for safe, legal practice inside your dev environment.
 
-- From the Kali terminal: `http://dvwa`
-- From your browser tab: `http://localhost:4280`
+- From the VS Code terminal: `http://dvwa`
+- From your browser tab: In VS Code, open the **Ports** tab and click the link for port **4280** (do not use localhost directly in Codespaces).
 
 Use only this target (or systems you own/have permission to test).
 
 ## Quick Start
 
-1. Open `http://localhost:4280` in your browser.
+1. Open the **Ports** tab in VS Code and click the link for port **4280** to open DVWA in your browser.
 2. Log in with `admin` / `password`.
 3. Open **DVWA Security** and set security to **Low**.
 4. If it is a new container, open **Setup** and click
@@ -26,14 +26,14 @@ Use only this target (or systems you own/have permission to test).
 
 The app likely started before MySQL was ready.
 
-1. Open `http://localhost:4280/setup.php`.
+1. Navigate to the `/setup.php` page in your browser.
 2. Click **Create / Reset Database**.
 3. If setup fails, rebuild the dev container so `db` restarts.
 
-### Cannot open localhost:4280
+### Cannot open the DVWA app in the browser
 
 - In VS Code, check the **Ports** tab.
-- Ensure port **4280** is forwarded and open it from there.
+- Ensure port **4280** is forwarded and click the link from there. Do not use `localhost` directly if you are in a Codespace.
 
 ### Login fails
 
