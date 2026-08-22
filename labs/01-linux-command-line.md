@@ -57,7 +57,7 @@ ls --help    # quick help summary
 Some actions need administrator rights. On Kali you "borrow" them with `sudo`:
 
 ```bash
-sudo apt-get update      # refresh the list of installable software
+sudo apt update      # refresh the list of installable software
 ```
 
 ## Searching and chaining commands
