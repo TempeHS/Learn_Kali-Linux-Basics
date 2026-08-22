@@ -46,6 +46,18 @@ john --show --format=raw-md5 hash.txt    # reveal what it found
 Because `letmein` is a common password, John finds it almost instantly. Try
 again with a long random password and watch it fail.
 
+### 3a. Common Passwords and Repositories
+
+In a real scenario, attackers use massive lists of known leaked passwords, not just the small one above. The most famous repository for this is [SecLists](https://github.com/danielmiessler/SecLists). It contains common usernames, passwords, dirty words, fuzzy patterns, and more.
+For example, the famous `rockyou.txt` wordlist is included there.
+
+Kali usually ships with `rockyou.txt` zipped in `/usr/share/wordlists/`. To use it on larger hashes:
+
+```bash
+# Unzip it if it's there
+sudo gzip -d /usr/share/wordlists/rockyou.txt.gz
+```
+
 ## 3b. The no-install shortcut: CrackStation
 
 [CrackStation](https://crackstation.net/) is an online lookup table of billions

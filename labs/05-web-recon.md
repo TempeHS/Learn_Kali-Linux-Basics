@@ -178,11 +178,19 @@ narrow and only increase depth when needed.
 
 ### 5d. Common web exploit patterns to recognise
 
-- **SQL injection**: input changes the database query.
-- **XSS**: input is reflected back into the page as script.
-- **Command injection**: input reaches shell/system commands.
-- **Path traversal**: input reads files outside intended folders (`../`).
-- **Auth/session flaws**: weak tokens, predictable IDs, or missing checks.
+These patterns frequently appear in CTF web challenges:
+
+- **Command injection (RCE)**: User input is passed unsafely to a system shell (e.g., via `system()` or `exec()`).
+  - _Goal_: Run OS commands on the server.
+  - _Pattern test_: Append `; id` or `& whoami` to an input field (e.g. an "IP to ping" tool).
+- **Cross-Site Scripting (XSS)**: User input is reflected back into the webpage without being escaping, allowing script execution in the viewer's browser.
+  - _Goal_: Steal cookies, force actions, or deface.
+  - _Pattern test_: Submit `<script>alert('XSS')</script>` or `<img src=x onerror=alert(1)>`.
+- **Path traversal (Directory traversal)**: Input specifying a file name is not constrained to a safe folder.
+  - _Goal_: Read sensitive files outside the web root.
+  - _Pattern test_: Submit `../../../../etc/passwd` or `....//....//....//etc/passwd` (to bypass basic filters).
+- **SQL injection (SQLi)**: Input changes the intended database query (tested in 5b).
+- **Auth/session flaws**: Weak tokens, predictable IDs, or missing checks.
 
 ### 5e. Burp Suite core workflow (manual testing)
 
@@ -227,13 +235,20 @@ curl -s "URL/view?page=../../../../etc/passwd" | head
 
 # SSRF-style signal: does a URL-fetch feature request internal addresses?
 curl -s "URL/fetch?url=http://127.0.0.1" | head
+
+# Command injection signal: can shell operators chain commands?
+curl -s -d "ip=127.0.0.1; id" URL/ping | grep uid=
+
+# Path traversal signal: basic bash traversal to access files
+curl -s "URL/download?file=../../../../../../etc/passwd" | grep root:
 ```
 
 Expected style of results:
 
 - Different user data after ID change -> possible IDOR.
-- System-file-like output (`root:x:...`) -> possible LFI.
+- System-file-like output (`root:x:...`) -> possible LFI or Path Traversal.
 - Internal service response/errors from URL fetch -> possible SSRF.
+- OS output like `uid=33(www-data)` -> possible Command Injection.
 
 Quick reference: [Common web exploit patterns beyond SQLi](../CHEATSHEET.md#common-web-exploit-patterns-beyond-sqli-ctf-labs-only).
 
