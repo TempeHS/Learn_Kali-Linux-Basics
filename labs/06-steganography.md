@@ -43,10 +43,11 @@ Expected output:
 Comment                         : pecan{exif_hunter}
 ```
 
-Hide plain text and find it with `strings`:
+Append plain text bytes to a real image and find them with `strings`:
 
 ```bash
-printf '\x89PNG\x00pecan{in_the_bytes}\x00' > blob.png
+cp suspect.png blob.png
+printf '\npecan{in_the_bytes}\n' >> blob.png
 strings blob.png | grep pecan
 ```
 

@@ -87,7 +87,9 @@ pecan
 
 ## Part C — Hashing (one-way fingerprints)
 
-A hash always gives the same output for the same input, but you can't reverse it.
+A hash always gives the same output for the same input. Secure hashes are
+designed to be one-way: there is no decryption key, though weak inputs can be
+guessed and compared with their hashes.
 
 ```bash
 echo -n "password123" | md5sum
@@ -134,8 +136,8 @@ Try it with the MD5 from above:
 ```
 
 CrackStation returns `password123`. Now hash a long random passphrase of your
-own and paste that hash in — CrackStation fails, because your passphrase is in
-no word list.
+own and paste that hash in. A genuinely random passphrase is unlikely to be in
+CrackStation's lookup tables.
 
 > [!IMPORTANT]
 > Only submit hashes from your own systems or from a challenge you are allowed
@@ -266,7 +268,7 @@ In CyberChef, this is just a recipe chain:
 2. **Verify:** Hash your own name with `sha256sum` and confirm it is 64 hex characters.
 3. **Do:** Paste the MD5 `5f4dcc3b5aa765d61d8327deb882cf99` into
    [CrackStation](https://crackstation.net/) and find the password. Then hash a
-   12-character random passphrase and show that CrackStation _cannot_ crack it.
+   12-character random passphrase and see whether CrackStation can find it.
 4. **Do:** Factor `n = 8051` with the
    [WolframAlpha factoring calculator](https://www.wolframalpha.com/calculators/factoring-calculator/)
    and write down `p` and `q`.

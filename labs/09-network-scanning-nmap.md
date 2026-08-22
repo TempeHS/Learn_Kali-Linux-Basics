@@ -17,7 +17,8 @@ first step in both attacking _and_ defending.
 
 ## Ports in 30 seconds
 
-A computer has 65,535 ports. Common ones:
+TCP and UDP port numbers run from 0 through 65,535 (65,536 values). Nmap scans
+ports 1 through 65,535 by default because port 0 is reserved. Common ports:
 
 | Port | Service                 |
 | ---- | ----------------------- |
@@ -89,7 +90,7 @@ sequenceDiagram
     You->>T: Is port 80 open?
     T-->>You: Yes (SYN/ACK)
     You->>T: Is port 23 open?
-    T-->>You: No reply / closed
+    T-->>You: RST (closed) or no reply (filtered)
 ```
 
 ## ✅ Challenge

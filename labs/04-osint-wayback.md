@@ -64,7 +64,7 @@ Website: **https://web.archive.org/**
 
 ```bash
 # Ask the Wayback API for the closest saved snapshot
-curl -s "http://archive.org/wayback/available?url=example.com"
+curl -s "https://archive.org/wayback/available?url=example.com"
 ```
 
 Expected output (timestamp will vary):

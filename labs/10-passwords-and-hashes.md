@@ -39,7 +39,7 @@ cat hash.txt
 Now let **John** try to crack it using a wordlist of common passwords:
 
 ```bash
-john --format=raw-md5 --wordlist=/usr/share/wordlists/john.lst hash.txt
+john --format=raw-md5 --wordlist=/usr/share/john/password.lst hash.txt
 john --show --format=raw-md5 hash.txt    # reveal what it found
 ```
 

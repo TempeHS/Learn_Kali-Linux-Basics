@@ -183,7 +183,7 @@ These patterns frequently appear in CTF web challenges:
 - **Command injection (RCE)**: User input is passed unsafely to a system shell (e.g., via `system()` or `exec()`).
   - _Goal_: Run OS commands on the server.
   - _Pattern test_: Append `; id` or `& whoami` to an input field (e.g. an "IP to ping" tool).
-- **Cross-Site Scripting (XSS)**: User input is reflected back into the webpage without being escaping, allowing script execution in the viewer's browser.
+- **Cross-Site Scripting (XSS)**: User input is reflected back into the webpage without being escaped, allowing script execution in the viewer's browser.
   - _Goal_: Steal cookies, force actions, or deface.
   - _Pattern test_: Submit `<script>alert('XSS')</script>` or `<img src=x onerror=alert(1)>`.
 - **Path traversal (Directory traversal)**: Input specifying a file name is not constrained to a safe folder.

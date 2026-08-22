@@ -19,7 +19,7 @@ job is to recognise the format and reverse it. The best tool for this is
 
 | Looks like…                                  | Probably is…       |
 | -------------------------------------------- | ------------------ |
-| `cGVjYW57...}` ends in `=` or letters+digits | **Base64**         |
+| `cGVjYW57...` uses letters, digits, `+`, `/`; may end in `=` | **Base64** |
 | `70 65 63 61 6e` (pairs of 0-9 a-f)          | **Hex**            |
 | `01110000 01100101` (only 0s and 1s)         | **Binary**         |
 | `pecan%7Bhi%7D` (`%` codes)                  | **URL encoding**   |

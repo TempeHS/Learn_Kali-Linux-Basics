@@ -58,7 +58,8 @@ Common magic numbers to memorise:
 
 ## Part C — Carve embedded files
 
-`binwalk` finds files hidden inside other files; `foremost` rebuilds them.
+`binwalk` identifies embedded file signatures and can extract recognised
+content with `-e`.
 
 ```bash
 echo "pecan{carved}" | gzip > hidden.gz
@@ -129,7 +130,7 @@ Triage mindset:
 
 1. **Do:** Run `file` on something in `/bin` (for example, `/bin/ls`) and identify its type.
 2. **Verify:** Carve the gzip out of `evidence.png` with `binwalk -e` and confirm you recovered the hidden content.
-3. **Explain:** Create `memory.raw`, run the triage `strings` command, and explain one clue type you found.
+3. **Explain:** Create a mock artifact with `printf 'token=pecan{memory_clue}\n' > memory.raw`, run the triage `strings` command, and explain the clue you found.
 4. **Practice:** Complete **Forensics → _3D flag_**, **_ABC company_** (pcap), and **_HackersAttack_** at
    [practice.pecanplus.org](https://practice.pecanplus.org/?page=challenges).
 
