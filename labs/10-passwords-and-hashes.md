@@ -46,7 +46,24 @@ john --show --format=raw-md5 hash.txt    # reveal what it found
 Because `letmein` is a common password, John finds it almost instantly. Try
 again with a long random password and watch it fail.
 
-## 3b. Hydra (concept demo)
+## 3b. The no-install shortcut: CrackStation
+
+[CrackStation](https://crackstation.net/) is an online lookup table of billions
+of already-cracked hashes. Paste the hash from `hash.txt` into the box and it
+returns `letmein` instantly — no wordlist, no John, no waiting.
+
+Use it as a **first** check on any hash you find in a CTF: if CrackStation
+knows it, you are done in seconds. If it does not, fall back to John with a
+bigger wordlist or rules.
+
+> [!IMPORTANT]
+> Only paste hashes from your own systems or from a challenge you are allowed to
+> solve. Uploading real user hashes to a public site leaks them.
+
+CrackStation only works because those passwords were **unsalted** and common.
+A salted hash (`$2y$...` bcrypt, `$6$...` sha512crypt) is not in any table.
+
+## 3c. Hydra (concept demo)
 
 `hydra` tries many passwords against a _login_. Run its help to see how it
 works — **do not** point it at real services:

@@ -59,18 +59,42 @@ the terminal:
 
 ### Common ciphers quick guide
 
-| Cipher / format                 | Typical clue                                        | First thing to try                     |
-| ------------------------------- | --------------------------------------------------- | -------------------------------------- |
-| Caesar / ROT13                  | text looks word-like but shifted (`uryyb`, `crpna`) | CyberChef `ROT13 Brute Force` or `tr`  |
-| Vigenere                        | hint mentions a keyword; letters look random        | CyberChef `Vigenere Decode`            |
-| Atbash                          | short weird text, substitution-style puzzle         | CyberChef `Atbash`                     |
-| Rail Fence                      | letters scrambled by position/rows                  | CyberChef `Rail Fence Cipher Decode`   |
-| Affine                          | hint includes `ax + b` or `mod 26`                  | CyberChef `Affine Cipher Brute Force`  |
-| XOR (single-byte)               | bytes/hex look noisy; challenge says XOR            | CyberChef `XOR Brute Force`            |
-| Base64 (encoding, not a cipher) | `A-Za-z0-9+/` with optional trailing `=`            | `base64 -d` or CyberChef `From Base64` |
+| Cipher / format                 | Typical clue                                        | First thing to try                                                                                                      |
+| ------------------------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Caesar / ROT13                  | text looks word-like but shifted (`uryyb`, `crpna`) | [cryptii Caesar Cipher](https://cryptii.com/pipes/caesar-cipher/) or `tr`                                               |
+| Vigenere                        | hint mentions a keyword; letters look random        | CyberChef `Vigenere Decode`                                                                                             |
+| Atbash                          | short weird text, substitution-style puzzle         | CyberChef `Atbash`                                                                                                      |
+| Rail Fence                      | letters scrambled by position/rows                  | CyberChef `Rail Fence Cipher Decode`                                                                                    |
+| Affine                          | hint includes `ax + b` or `mod 26`                  | CyberChef `Affine Cipher Brute Force`                                                                                   |
+| XOR (single-byte)               | bytes/hex look noisy; challenge says XOR            | CyberChef `XOR Brute Force`                                                                                             |
+| RSA                             | you are given `n`, `e` and `c`                      | factor `n` with the [WolframAlpha factoring calculator](https://www.wolframalpha.com/calculators/factoring-calculator/) |
+| Base64 (encoding, not a cipher) | `A-Za-z0-9+/` with optional trailing `=`            | `base64 -d` or CyberChef `From Base64`                                                                                  |
 
 > Tip: if one step produces new gibberish, it is probably layered. Decode one
 > layer at a time and re-check the result.
+
+### Online crypto helpers
+
+| Site                                                                                                | Use it for                                                  |
+| --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| [cryptii](https://cryptii.com/pipes/caesar-cipher/)                                                 | Caesar/ROT with a live shift slider — easier than CyberChef |
+| [CyberChef](https://gchq.github.io/CyberChef/)                                                      | chaining several operations (Base64 → ROT13 → hex)          |
+| [CrackStation](https://crackstation.net/)                                                           | looking up MD5/SHA-1/SHA-256/NTLM password hashes           |
+| [WolframAlpha factoring calculator](https://www.wolframalpha.com/calculators/factoring-calculator/) | factoring a small RSA modulus `n` into `p` and `q`          |
+
+> Only paste hashes and ciphertext from your own systems or from a challenge you
+> are allowed to solve — these are public websites.
+
+### RSA in one box
+
+```
+n = p * q            public modulus (factor this in CTFs)
+e = 65537            public exponent
+phi = (p-1)*(q-1)
+d = pow(e, -1, phi)  private exponent
+c = pow(m, e, n)     encrypt
+m = pow(c, d, n)     decrypt
+```
 
 ---
 
@@ -85,6 +109,21 @@ the terminal:
 
 > **Wayback tip:** browse `https://web.archive.org/web/*/SITE` to see every saved
 > snapshot — deleted pages, old emails and leaked flags often live in history.
+
+### Online OSINT tools
+
+| Tool                                              | Use it for                                                         |
+| ------------------------------------------------- | ------------------------------------------------------------------ |
+| [Wayback Machine](https://web.archive.org/)       | Old versions of a site, deleted pages                              |
+| Google Lens / TinEye / Yandex Images              | Reverse image search (run the photo through all three)             |
+| [Google Translate](https://translate.google.com/) | **Image tab** reads a foreign sign from a photo; detect a language |
+| [Google Street View](https://www.google.com/maps) | Stand on the street and match shopfronts, poles and kerbs          |
+| [Google Earth](https://earth.google.com/web/)     | Historical satellite imagery, 3D terrain/skyline, measure tool     |
+| [OpenStreetMap](https://www.openstreetmap.org)    | Named paths, buildings and amenities other maps omit               |
+
+> **Geolocation tip:** translate a sign to get the business name, search that
+> name in the **local** language, then confirm with Street View **and** a second
+> independent clue.
 
 ---
 
@@ -245,12 +284,12 @@ Quick web checks:
 
 ### Git and env secret leak checks
 
-| Command                                                                                             | Expected output                                |
-| --------------------------------------------------------------------------------------------------- | ---------------------------------------------- | ------ | -------- | ----- | -------------------------------------------------------------- | ------------------------------------------ |
-| `find . -maxdepth 3 -type f \( -name ".env" -o -name "*.env" -o -name "*.pem" -o -name "id_rsa" \)` | paths of potentially sensitive files           |
-| `git log --oneline --all \| head`                                                                   | recent commit history for secret-hunting       |
-| `git grep -nEi "(api[_-]?key                                                                        | token                                          | secret | password | AWS\_ | BEGIN PRIVATE KEY)" $(git rev-list --all) 2>/dev/null \| head` | matches where secrets may exist in history |
-| `git show HEAD~1:.env 2>/dev/null \| head`                                                          | previous-version env content (if file existed) |
+| Command                                                                                                                     | Expected output                                |
+| --------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| `find . -maxdepth 3 -type f \( -name ".env" -o -name "*.env" -o -name "*.pem" -o -name "id_rsa" \)`                         | paths of potentially sensitive files           |
+| `git log --oneline --all \| head`                                                                                           | recent commit history for secret-hunting       |
+| `git grep -nEi "(api[_-]?key\|token\|secret\|password\|AWS_\|BEGIN PRIVATE KEY)" $(git rev-list --all) 2>/dev/null \| head` | matches where secrets may exist in history     |
+| `git show HEAD~1:.env 2>/dev/null \| head`                                                                                  | previous-version env content (if file existed) |
 
 ---
 

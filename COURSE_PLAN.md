@@ -100,14 +100,19 @@ flowchart TD
 
 ### Lesson 3 — Cryptography Basics
 
-- **Goal:** Caesar/ROT, XOR, and simple `openssl` ciphers and hashing.
+- **Goal:** Caesar/ROT, XOR, hashing, `openssl` ciphers, and the basics of RSA.
 - **Material:** [labs/03-cryptography.md](labs/03-cryptography.md)
+- **Tools:** [cryptii](https://cryptii.com/pipes/caesar-cipher/) (Caesar shift
+  slider), [CrackStation](https://crackstation.net/) (password-hash lookup),
+  [WolframAlpha factoring calculator](https://www.wolframalpha.com/calculators/factoring-calculator/)
+  (factor a small RSA `n`).
 - **Key commands:**
   ```bash
   echo -n "secret" | openssl dgst -sha256        # hashing
   openssl enc -aes-256-cbc -pbkdf2 -in msg.txt -out msg.enc
   openssl enc -d -aes-256-cbc -pbkdf2 -in msg.enc # decrypt
   echo -n "pecan" | base32                        # other encodings
+  python3 -c "print(pow(2790, 2753, 3233))"       # RSA decrypt (m = c^d mod n)
   ```
 - **CTF link:** Cryptography → _Climbing_ (and CyberChef from Lesson 2).
 
@@ -116,7 +121,10 @@ flowchart TD
 - **Goal:** Find public information about a person/site; recover **old versions
   of a website** using the **Internet Archive Wayback Machine**.
 - **Material:** [labs/04-osint-wayback.md](labs/04-osint-wayback.md)
-- **Tools:** **https://web.archive.org/** , `whois`, `dig`, `curl`, image EXIF.
+- **Tools:** **https://web.archive.org/** , `whois`, `dig`, `curl`, image EXIF,
+  [Google Translate](https://translate.google.com/) (read foreign signs from a
+  photo), [Google Earth](https://earth.google.com/web/) and **Google Street View**
+  (confirm a location), [OpenStreetMap](https://www.openstreetmap.org).
 - **Workflow:**
   1. Browse `https://web.archive.org/web/*/<site>` to list saved snapshots.
   2. Open an older snapshot to read content the site owner has since removed
@@ -251,4 +259,7 @@ by CTF category, plus a set of flag-hunting one-liners.
 - [picoCTF](https://picoctf.org/) · [TryHackMe](https://tryhackme.com/) ·
   [OverTheWire: Bandit](https://overthewire.org/wargames/bandit/)
 - [CyberChef](https://gchq.github.io/CyberChef/) ·
+  [cryptii](https://cryptii.com/pipes/caesar-cipher/) ·
+  [CrackStation](https://crackstation.net/) ·
+  [WolframAlpha factoring calculator](https://www.wolframalpha.com/calculators/factoring-calculator/) ·
   [Wayback Machine](https://web.archive.org/)
