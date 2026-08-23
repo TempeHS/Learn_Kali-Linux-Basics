@@ -109,6 +109,10 @@ You and your team must understand, test, and verify any AI-assisted work. Do
 not share flags, credentials, personal information, or competition-only files
 with a public AI service.
 
+Use the [AI Prompt Guide for CTF Learning](../AI_PROMPT_GUIDE.md) for examples
+that ask for explanations, small hints and debugging help without outsourcing
+the solve.
+
 ## Set up team communication
 
 Create or join a **Discord server for your team** before the event.

@@ -19,7 +19,7 @@ then jump to the matching language.
 | Challenge file               | Guide                                                    |
 | ---------------------------- | -------------------------------------------------------- |
 | `.class`, `.jar`             | [Java](#java-class-and-jar)                              |
-| Native ELF or PE             | [C and C++](#c-and-c-native-elf-or-pe)                   |
+| Native ELF or PE             | [C and C++](#c-and-c-native-elf-or-pe-files)             |
 | `.exe`, `.dll` with .NET/CLR | [C# and .NET](#c-and-net-exe-and-dll)                    |
 | `.py`, `.pyc`, PyInstaller   | [Python](#python-source-bytecode-and-packaged-programs)  |
 | `.js`, `.mjs`, `.cjs`        | [JavaScript and Node.js](#javascript-and-nodejs)         |

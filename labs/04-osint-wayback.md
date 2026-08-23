@@ -124,16 +124,29 @@ answer:
 
 ### Other free research sources
 
-| Source                                            | Use it for                                                   |
-| ------------------------------------------------- | ------------------------------------------------------------ |
-| Wikidata                                          | Structured facts, IDs, coordinates                           |
-| [Google Translate](https://translate.google.com/) | Reading signs, menus and foreign-language pages (see Part E) |
-| [Google Earth](https://earth.google.com/web/)     | 3D terrain, historical imagery, measuring distances          |
-| [Google Street View](https://www.google.com/maps) | Standing on the street to match a photo                      |
-| [OpenStreetMap](https://www.openstreetmap.org)    | Named paths, buildings and amenities other maps leave off    |
-| Company/charity registers                         | Official names, addresses, registration dates                |
-| News archives                                     | Dates and eyewitness detail for an event                     |
-| Flight/ship trackers                              | Aircraft and vessel movements from public feeds              |
+| Source                                                          | Use it for                                                   |
+| --------------------------------------------------------------- | ------------------------------------------------------------ |
+| Wikidata                                                        | Structured facts, IDs, coordinates                           |
+| [Google Translate](https://translate.google.com/)               | Reading signs, menus and foreign-language pages (see Part E) |
+| [Google Earth](https://earth.google.com/web/)                   | 3D terrain, historical imagery, measuring distances          |
+| [Google Street View](https://www.google.com/maps)               | Standing on the street to match a photo                      |
+| [OpenStreetMap](https://www.openstreetmap.org)                  | Named paths, buildings and amenities other maps leave off    |
+| [Mapillary](https://www.mapillary.com/app/)                     | Crowdsourced street imagery beyond Street View coverage      |
+| [SunCalc](https://www.suncalc.org/)                             | Checking sun direction, shadows and likely time of day       |
+| Company/charity registers                                       | Official names, addresses, registration dates                |
+| News archives                                                   | Dates and eyewitness detail for an event                     |
+| [ICANN Lookup](https://lookup.icann.org/)                       | Public domain registration information                       |
+| [crt.sh](https://crt.sh/)                                       | Certificate records that may reveal subdomains               |
+| [Archive.today](https://archive.ph/)                            | Archived pages that may be missing from the Wayback Machine  |
+| [OpenSky Network](https://opensky-network.org/network/explorer) | Live and historical aircraft movements from public feeds     |
+| [OpenRailwayMap](https://www.openrailwaymap.org/)               | Railway lines, stations and infrastructure                   |
+| [VesselFinder](https://www.vesselfinder.com/)                   | Public ship positions and movement history                   |
+| [OSINT Framework](https://osintframework.com/)                  | Finding specialist tools after identifying the research task |
+
+> [!IMPORTANT]
+> Public OSINT data can be incomplete, delayed or wrong. Confirm an important
+> finding with at least two independent sources. Do not upload private photos,
+> competition files, hashes or documents to third-party research services.
 
 ## Part E — Reverse image search & geolocation 🗺️
 
