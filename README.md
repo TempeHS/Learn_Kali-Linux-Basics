@@ -90,6 +90,7 @@ Then work through the lessons in order, starting with
 | 10  | [Password & Hash Basics](labs/10-passwords-and-hashes.md)                          | Understand password security   |
 | 11  | [CTF Workflow Playbook & Competition](labs/11-ctf-competition.md)                  | Triage, teamwork, score points |
 | ★   | [Python for Security](labs/12-python-scripting.md)                                 | Bonus: automate your solves    |
+| 13  | [On the Day Checklist](labs/13-on-the-day.md)                                      | Arrive equipped and ready      |
 
 ## CTF Course
 
