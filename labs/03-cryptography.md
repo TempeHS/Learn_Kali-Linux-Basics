@@ -85,6 +85,44 @@ Expected output:
 pecan
 ```
 
+### CTF shortcut: use the known flag prefix
+
+Every PECAN+ flag starts with `pecan{`. In cryptography, known plaintext like
+this is called a **crib**. You can XOR the known prefix with the ciphertext to
+work backwards towards a repeating key:
+
+```python
+ciphertext = bytes.fromhex("1b040f08051a1459193e5d1a34135f1f58131f58090d5f14")
+crib = b"pecan{"
+
+key_clue = bytes(cipher ^ plain for cipher, plain in zip(ciphertext, crib))
+print("key clue:", key_clue)
+```
+
+Expected output:
+
+```
+key clue: b'kalika'
+```
+
+`kalika` shows `kali` beginning to repeat. Use that four-byte key across the
+whole ciphertext:
+
+```python
+key = b"kali"
+flag = bytes(byte ^ key[index % len(key)] for index, byte in enumerate(ciphertext))
+print(flag.decode())
+```
+
+Expected output:
+
+```
+pecan{x0r_1s_r3v3rs1bl3}
+```
+
+This is an optional advanced shortcut. For a first attempt, CyberChef's **XOR
+Brute Force** is still the quickest tool.
+
 ## Part C — Hashing (one-way fingerprints)
 
 A hash always gives the same output for the same input. Secure hashes are

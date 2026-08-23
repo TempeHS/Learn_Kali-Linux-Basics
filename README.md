@@ -108,6 +108,11 @@ python3 -m pytest -m "not network" -v    # offline subset
 Keep the [Kali Linux & CTF Cheat Sheet](CHEATSHEET.md) handy — every command
 with its expected output, grouped by CTF category.
 
+For advanced CTF binaries, use the
+[Reverse Engineering by Language guide](ADVANCED_REVERSE_ENGINEERING.md) to
+jump directly to Java, C/C++, C#/.NET, Python, JavaScript, Go, Rust or Android
+tooling on Kali.
+
 ## Included Tools
 
 Networking: `nmap`, `whois`, `dnsutils`, `traceroute`, `tcpdump`, `tshark`,

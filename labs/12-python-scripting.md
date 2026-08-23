@@ -248,6 +248,29 @@ sha256: 959d7070b528ebcff7648617d098119a86706b0fc269d494a4e6558aaa2c8c27
 This is CyberChef and `openssl`, rebuilt in five lines — and it runs on **any**
 operating system.
 
+### Tool 3b — Filter single-byte XOR results
+
+When a challenge says that a file uses single-byte XOR, Python can try all 256
+keys and print only results that contain the known `pecan{` flag prefix:
+
+```python
+data = bytes.fromhex("322721232c3931732c252e711d203b36711d3a72303f")
+
+for key in range(256):
+    decoded = bytes(byte ^ key for byte in data)
+    if b"pecan{" in decoded.lower():
+        print(f"key={key:#04x} -> {decoded}")
+```
+
+Expected output:
+
+```text
+key=0x42 -> b'pecan{s1ngl3_byt3_x0r}'
+```
+
+Filtering is easier and more reliable than reading 256 lines by eye. Only use
+it on data supplied by a legal practice challenge.
+
 ### Tool 4 — Read image metadata with Pillow
 
 This replaces `exiftool` for the basics. After `pip install pillow`, create

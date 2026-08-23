@@ -3,6 +3,14 @@
 Use this checklist before competition day so your team can start on time and
 stay in contact.
 
+## Confirm your entry
+
+- [ ] Register at [pecanplus.org/register.html](https://pecanplus.org/register.html).
+- [ ] Use the [Division Decision Guide](https://pecanplus.org/assets/DivisionDecisionGuide.pdf)
+      to confirm your division.
+- [ ] Check the event date, arrival time, location and competition rules.
+- [ ] Make sure every teammate knows the plan.
+
 ## What to bring
 
 - [ ] A laptop with a working **Kali Linux VirtualBox VM**
