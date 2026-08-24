@@ -27,13 +27,30 @@ puzzles designed for learning.
 
 1. Each challenge gives you a file, a link or a clue.
 2. You find the hidden flag, e.g. `pecan{y0u_f0und_me}`.
-3. You submit the flag for points. Harder challenges = more points.
-4. Difficulty is shown with locks: 🔓 Beginner · 🔓🔓 Intermediate · 🔓🔓🔓 Advanced.
+3. You submit the flag for points. There are no difficulty indicators, so you must actively triage to figure out what is hard and what is easy!
+
+## Understanding Scoring and Triage
+
+In a CTF, effective triage and understanding how scoring works are just as important as technical skills. Here is some practical advice for maximizing your team's score:
+
+**Scoring Mechanics**
+
+- **Dynamic Scoring:** PECAN+ uses dynamic scoring. This means every challenge starts at maximum points (e.g. 500), but as more teams solve it, its value drops for _everyone_. A challenge solved by 50 teams might end up worth only 50 points.
+- **The Catch:** If you spend 3 hours solving a hard problem that no one else can solve, you keep all 500 points. But if you ignore an easy challenge, and 100 teams solve it, its value drops so low it barely matters.
+- **No Difficulty Indicators:** There are no "beginner" or "advanced" labels. You must use the solve count as your only gauge of how hard a challenge is.
+
+**Practical Triage Advice in a Dynamic Game**
+
+- **Harvest the "easy" points fast:** If a challenge has a lot of solves, it is easy or straightforward. Solve it immediately to grab a share of those shrinking points before they hit the floor.
+- **Save the hard challenges for later:** An unwieldy, 0-solve challenge will keep its maximum point value all day. You don't lose value by waiting to tackle it in the afternoon.
+- **Check the solves counter constantly:** If you see a challenge suddenly jumping in solves, another team might have found the trick. Pivot and grab it!
+- **Divide by category, not difficulty:** Have teammates focus on their strengths. If one person loves OSINT, let them clear out all the OSINT challenges before moving to Web.
+- **Timebox yourself:** If you make zero progress or have no new ideas after 15 minutes on a challenge, park it and switch. You can always come back with a fresh perspective.
 
 ## Your first 10 minutes
 
-1. Scan every challenge title and difficulty before choosing one.
-2. Pick a Beginner challenge in a category you recognise.
+1. Scan every challenge title and its current solve count before choosing one.
+2. Pick a highly-solved challenge in a category you recognise.
 3. Tell your team which challenge you are trying.
 4. Open a notes document and record the challenge name.
 5. Start with one or two quick checks instead of trying every tool.
@@ -101,11 +118,11 @@ My best guess:
 
 ### Change focus as time passes
 
-- **First 30 minutes:** collect accessible Beginner flags.
+- **First 30 minutes:** collect the most solved flags.
 - **Middle:** collaborate on challenges where someone has found a useful clue.
 - **Final phase:** revisit parked challenges and check unsubmitted flags.
 
-## Suggested first solves (all Beginner 🔓)
+## Suggested first solves (practice site only)
 
 Work these in order — each maps directly to a lesson you've finished:
 
@@ -118,7 +135,7 @@ Work these in order — each maps directly to a lesson you've finished:
 
 ## ✅ Challenge
 
-1. **Do:** Choose three beginner challenges from different categories and solve them.
+1. **Do:** Choose three highly-solved challenges from different categories and solve them.
 2. **Verify:** Record the exact commands you used and one key clue for each solve.
 3. **Explain:** Write a one-sentence handoff note for one unsolved challenge.
 4. **Practice:** Submit your solved flags and summarize which technique worked best.
