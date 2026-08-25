@@ -20,6 +20,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     tree \
     man-db \
     manpages \
+    # Beginner-friendly, example-first summaries of commands: `tldr nmap`
+    tealdeer \
+    # Read and filter JSON from the web-recon labs
+    jq \
     git \
     curl \
     wget \

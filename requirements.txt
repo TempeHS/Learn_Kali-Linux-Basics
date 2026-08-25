@@ -5,6 +5,8 @@
 requests
 
 # Friendly, colourful terminal output for student scripts.
+# Also provides the terminal renderers used by the `lab` and `show` commands,
+# via `python3 -m rich.markdown` and `python3 -m rich.syntax`.
 rich
 
 # Validate that every command taught in the lessons works in this codespace.

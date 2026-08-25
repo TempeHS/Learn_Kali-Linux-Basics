@@ -20,7 +20,7 @@
   },
   "waitFor": "onCreateCommand",
   "updateContentCommand": "",
-  "postCreateCommand": "pip3 install --break-system-packages -r requirements.txt || pip3 install -r requirements.txt",
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
   "postStartCommand": "",
   "customizations": {
     "vscode": {
@@ -35,6 +35,11 @@
         "workbench.colorTheme": "Default Dark+",
         "workbench.iconTheme": "vscode-icons",
         "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.fontSize": 15,
+        // Puts a green tick / red cross in the gutter beside every command so
+        // students can see at a glance which ones succeeded.
+        "terminal.integrated.shellIntegration.decorationsEnabled": "both",
+        "terminal.integrated.stickyScroll.enabled": true,
         "python.defaultInterpreterPath": "/usr/bin/python3",
         "chat.agent.enabled": true
       },
